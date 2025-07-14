@@ -12,6 +12,108 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+
+const pieData = [
+  { name: "Consumed", value: 683 },
+  { name: "Remaining", value: 2130 - 683 },
+];
+
+const COLORS = ["#f88", "#fdd"];
+
+const macroData = [
+  { label: "Белок", value: 74, max: 90 },
+  { label: "Клетчатка", value: 30, max: 40 },
+  { label: "Углеводы", value: 100, max: 150 },
+  { label: "Жиры", value: 45, max: 70 },
+];
+
+const calorieHistory = [
+  { name: "Пн", value: 1800 },
+  { name: "Вт", value: 1300 },
+  { name: "Ср", value: 1000 },
+  { name: "Чт", value: 1600 },
+  { name: "Пт", value: 1200 },
+  { name: "Сб", value: 1900 },
+  { name: "Вс", value: 1400 },
+];
+
+export default function App() {
+  const [macroTab, setMacroTab] = useState("calories");
+  const [pageTab, setPageTab] = useState("summary");
+  
+  return (
+    <Container>
+      {pageTab === "summary" && (
+        <Section>
+          {/* Overview */}
+          <Box>
+            <Title>Ежедневный обзор калорий</Title>
+            <CaloriesText>683 ккал / 2130 ккал</CaloriesText>
+            <ResponsiveContainer width="100%" height={150}>
+              <PieChart>
+                <Pie
+                  data={pieData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={35}
+                  outerRadius={50}
+                  dataKey="value"
+                  >
+                  {pieData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+          </Box>
+
+          {/* Macros */}
+          <Title>Мини-графики БЖУ</Title>
+          <MacrosGrid>
+            {macroData.map((m) => (
+              <MacroBox key={m.label}>
+                <MacroLabel>{m.label}</MacroLabel>
+                <MacroValue>
+                  {m.value} г / {m.max} г
+                </MacroValue>
+              </MacroBox>
+            ))}
+          </MacrosGrid>
+          <ToggleButtons>
+            <ToggleButton active={macroTab === "macros"} onClick={() => setMacroTab("macros")}>БЖУ</ToggleButton>
+            <ToggleButton active={macroTab === "calories"} onClick={() => setMacroTab("calories")}>Калории</ToggleButton>
+          </ToggleButtons>
+
+          {/* Calorie history */}
+          <Title>История потребления</Title>
+          <ResponsiveContainer width="100%" height={150}>
+            <BarChart data={calorieHistory}>
+              <XAxis dataKey="name" />
+              <YAxis hide />
+              <Tooltip />
+              <Bar dataKey="value" fill="#ffc085" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </Section>
+      )}
+
+      {pageTab === "profile" && (
+        <Section>
+          <Title>Профиль пользователя</Title>
+          <p>Имя: Иван Иванов</p>
+          <p>Возраст: 28</p>
+          <p>Цель: Похудение</p>
+        </Section>
+      )}
+
+      {/* Bottom Nav */}
+      <BottomNav>
+        <NavItem active={pageTab === "summary"} onClick={() => setPageTab("summary")}>🏠<br />Сводка</NavItem>
+        <NavItem active={pageTab === "profile"} onClick={() => setPageTab("profile")}>👤<br />Профиль</NavItem>
+      </BottomNav>
+    </Container>
+  );
+}
 const Container = styled.div`
   min-height: 100vh;
   background-color: white;
@@ -102,105 +204,3 @@ const NavItem = styled.div<{ active: boolean }>`
   font-size: 14px;
   color: ${(props) => (props.active ? "#6b21a8" : "#000")};
 `;
-
-const pieData = [
-  { name: "Consumed", value: 683 },
-  { name: "Remaining", value: 2130 - 683 },
-];
-
-const COLORS = ["#f88", "#fdd"];
-
-const macroData = [
-  { label: "Белок", value: 74, max: 90 },
-  { label: "Клетчатка", value: 30, max: 40 },
-  { label: "Углеводы", value: 100, max: 150 },
-  { label: "Жиры", value: 45, max: 70 },
-];
-
-const calorieHistory = [
-  { name: "Пн", value: 1800 },
-  { name: "Вт", value: 1300 },
-  { name: "Ср", value: 1000 },
-  { name: "Чт", value: 1600 },
-  { name: "Пт", value: 1200 },
-  { name: "Сб", value: 1900 },
-  { name: "Вс", value: 1400 },
-];
-
-export default function App() {
-  const [macroTab, setMacroTab] = useState("calories");
-  const [pageTab, setPageTab] = useState("summary");
-
-  return (
-    <Container>
-      {pageTab === "summary" && (
-        <Section>
-          {/* Overview */}
-          <Box>
-            <Title>Ежедневный обзор калорий</Title>
-            <CaloriesText>683 ккал / 2130 ккал</CaloriesText>
-            <ResponsiveContainer width="100%" height={150}>
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={35}
-                  outerRadius={50}
-                  dataKey="value"
-                >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index]} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-          </Box>
-
-          {/* Macros */}
-          <Title>Мини-графики БЖУ</Title>
-          <MacrosGrid>
-            {macroData.map((m) => (
-              <MacroBox key={m.label}>
-                <MacroLabel>{m.label}</MacroLabel>
-                <MacroValue>
-                  {m.value} г / {m.max} г
-                </MacroValue>
-              </MacroBox>
-            ))}
-          </MacrosGrid>
-          <ToggleButtons>
-            <ToggleButton active={macroTab === "macros"} onClick={() => setMacroTab("macros")}>БЖУ</ToggleButton>
-            <ToggleButton active={macroTab === "calories"} onClick={() => setMacroTab("calories")}>Калории</ToggleButton>
-          </ToggleButtons>
-
-          {/* Calorie history */}
-          <Title>История потребления</Title>
-          <ResponsiveContainer width="100%" height={150}>
-            <BarChart data={calorieHistory}>
-              <XAxis dataKey="name" />
-              <YAxis hide />
-              <Tooltip />
-              <Bar dataKey="value" fill="#ffc085" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </Section>
-      )}
-
-      {pageTab === "profile" && (
-        <Section>
-          <Title>Профиль пользователя</Title>
-          <p>Имя: Иван Иванов</p>
-          <p>Возраст: 28</p>
-          <p>Цель: Похудение</p>
-        </Section>
-      )}
-
-      {/* Bottom Nav */}
-      <BottomNav>
-        <NavItem active={pageTab === "summary"} onClick={() => setPageTab("summary")}>🏠<br />Сводка</NavItem>
-        <NavItem active={pageTab === "profile"} onClick={() => setPageTab("profile")}>👤<br />Профиль</NavItem>
-      </BottomNav>
-    </Container>
-  );
-}
