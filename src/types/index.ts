@@ -34,3 +34,16 @@ export interface FoodEntry {
   fats: number;
   carbs: number;
 }
+
+export interface UserProfile {
+  firstName: string;
+  lastName: string;
+  subscriptionExpiry: string;
+  birthDate: string;
+  gender: string;
+  goal: string;
+  calories: number;
+  proteins: number;
+  fats: number;
+  carbs: number;
+}

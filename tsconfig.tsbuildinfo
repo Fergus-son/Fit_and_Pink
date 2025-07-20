@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/main.tsx","./src/telegram.ts","./src/components/caloriestats.tsx","./src/types/index.ts","./src/types/telegram.d.ts"],"version":"5.8.3"}
+{"root":["./src/app.tsx","./src/main.tsx","./src/telegram.ts","./src/components/caloriestats.tsx","./src/components/foodhistorymodal.tsx","./src/components/profiletab.tsx","./src/components/summarytab.tsx","./src/styles/profile.ts","./src/styles/shared.ts","./src/styles/summary.ts","./src/types/index.ts","./src/types/telegram.d.ts"],"version":"5.8.3"}

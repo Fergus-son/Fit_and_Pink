@@ -1,5 +1,13 @@
 import styled from "styled-components";
 
+export const Section = styled.section`
+  padding: 1.5rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+`;
+
 export const Avatar = styled.div`
 width: 64px;
 height: 64px;
