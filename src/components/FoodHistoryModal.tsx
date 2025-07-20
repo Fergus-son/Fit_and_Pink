@@ -66,12 +66,15 @@ const ModalActions = styled.div`
 `;
 
 interface FoodEntry {
+  timestamp: string;
   name: string;
-  time: string;
   calories: number;
-  proteins: number;
-  fats: number;
+  protein: number;
+  fat: number;
   carbs: number;
+  fiber: number;
+  weight: number;
+  meal_type: string;
 }
 
 interface FoodHistoryModalProps {
@@ -98,10 +101,10 @@ export const FoodHistoryModal: React.FC<FoodHistoryModalProps> = ({
         {entries.map((entry, index) => (
           <FoodItem key={index}>
             <FoodName>{entry.name}</FoodName>
-            <div>{entry.time}</div>
+            <div>{entry.timestamp}</div>
             <FoodDetails>
               <span>{entry.calories} ккал</span>
-              <span>БЖУ: {entry.proteins}/{entry.fats}/{entry.carbs}</span>
+              <span>БЖУ: {entry.protein}/{entry.fat}/{entry.carbs}</span>
             </FoodDetails>
             <Button onClick={() => onDelete(index)}>Удалить блюдо</Button>
           </FoodItem>

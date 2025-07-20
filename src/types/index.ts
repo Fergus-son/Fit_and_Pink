@@ -1,6 +1,10 @@
 export interface CalorieEntry {
   date: string;
   calories: number;
+  protein?: number;
+  fat?: number;
+  carbs?: number;
+  fiber?: number;
 }
 
 export interface UserStats {
@@ -19,20 +23,24 @@ export interface NutritionData {
   history: {
     name: string;
     calories: number;
-    proteins: number;
-    fats: number;
+    protein: number;
+    fat: number;
     carbs: number;
+    fiber: number;
     entries: FoodEntry[];
   }[];
 }
 
 export interface FoodEntry {
+  timestamp: string;
   name: string;
-  time: string;
   calories: number;
-  proteins: number;
-  fats: number;
+  protein: number;
+  fat: number;
   carbs: number;
+  fiber: number;
+  weight: number;
+  meal_type: string;
 }
 
 export interface UserProfile {
