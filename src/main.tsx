@@ -1,33 +1,40 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import App from './App';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { initTelegram } from './telegram'
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      retry: 1,
-    },
-  },
-});
-
-function initApp() {
-  // Инициализация Telegram только если WebApp доступен
-  if (window.Telegram?.WebApp) {
-    import('./telegram').then(({ initTelegram }) => initTelegram());
-  }
-
-  const container = document.getElementById('root');
-  const root = createRoot(container!);
-
-  root.render(
-    <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <App />
-      </QueryClientProvider>
-    </React.StrictMode>
-  );
+// Определяем тип приложения по URL
+const appType = () => {
+  if (window.location.pathname.includes('profile')) return 'profile'
+  if (window.location.pathname.includes('summary')) return 'summary'
+  return 'main'
 }
 
-initApp();
+// Инициализация приложения
+async function initializeApp() {
+  // Инициализация Telegram WebApp
+  if (window.Telegram?.WebApp) {
+    initTelegram()
+  }
+
+  // Загрузка нужного компонента
+  let AppComponent
+  switch (appType()) {
+    case 'profile':
+      AppComponent = (await import('./ProfileApp')).default
+      break
+    case 'summary':
+      AppComponent = (await import('./SummaryApp')).default
+      break
+    default:
+      AppComponent = (await import('./App')).default
+  }
+
+  // Рендеринг
+  ReactDOM.createRoot(document.getElementById('root')!).render(
+    <React.StrictMode>
+      <AppComponent />
+    </React.StrictMode>
+  )
+}
+
+initializeApp().catch(console.error)

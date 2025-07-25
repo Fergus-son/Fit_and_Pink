@@ -1,0 +1,1 @@
+import{r as t,i as s,j as e}from"./main-DlrAUet3.js";import{C as a,S as n}from"./shared-Bb7SbMXN.js";import{P as o}from"./ProfileTab-Lfc8p_cu.js";function m(){const[i,r]=t.useState(!1);return t.useEffect(()=>{s(),r(!0)},[]),i?e.jsx(a,{children:e.jsx(n,{children:e.jsx(o,{})})}):null}export{m as default};

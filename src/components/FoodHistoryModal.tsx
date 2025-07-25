@@ -1,80 +1,22 @@
-// FoodHistoryModal.tsx
 import React from "react";
-import styled from "styled-components";
+import { 
+  ModalOverlay, 
+  ModalContent, 
+  FoodItem, 
+  FoodName, 
+  FoodDetails,
+  MacroRow,
+  Button,
+  ModalActions
+} from "../styles/history";
 
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-`;
-
-const ModalContent = styled.div`
-  background: white;
-  border-radius: 16px;
-  padding: 20px;
-  width: 90%;
-  max-width: 500px;
-  max-height: 80vh;
-  overflow-y: auto;
-`;
-
-const FoodItem = styled.div`
-  margin-bottom: 16px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #eee;
-`;
-
-const FoodName = styled.h3`
-  margin: 0 0 8px 0;
-  font-size: 16px;
-`;
-
-const FoodDetails = styled.div`
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-  color: #666;
-`;
-
-const MacroRow = styled.div`
-  display: flex;
-  margin-top: 4px;
-  font-size: 12px;
-`;
-
-const Button = styled.button`
-  background: #ff6b6b;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
-  margin-top: 8px;
-  cursor: pointer;
-`;
-
-const ModalActions = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-`;
-
-interface FoodEntry {
+export interface FoodEntry {
   timestamp: string;
   name: string;
   calories: number;
   protein: number;
   fat: number;
   carbs: number;
-  fiber: number;
-  weight: number;
-  meal_type: string;
 }
 
 interface FoodHistoryModalProps {
@@ -83,6 +25,7 @@ interface FoodHistoryModalProps {
   onClose: () => void;
   onSave: () => void;
   onDelete: (index: number) => void;
+  isSaveDisabled?: boolean;
 }
 
 export const FoodHistoryModal: React.FC<FoodHistoryModalProps> = ({
@@ -91,28 +34,65 @@ export const FoodHistoryModal: React.FC<FoodHistoryModalProps> = ({
   onClose,
   onSave,
   onDelete,
+  isSaveDisabled = false,
 }) => {
+  const formatTime = (timestamp: string) => {
+    return new Date(timestamp).toLocaleTimeString('ru-RU', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  const handleAdd = () => {
+    // Добавляем пустую запись — пользователь сможет отредактировать
+    const newEntry: FoodEntry = {
+      timestamp: new Date().toISOString(),
+      name: "Новое блюдо",
+      calories: 0,
+      protein: 0,
+      fat: 0,
+      carbs: 0
+    };
+    entries.push(newEntry);
+    onSave();
+  };
+
   return (
     <ModalOverlay onClick={onClose}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
         <h2>История питания</h2>
-        <h3>Ваши блюда</h3>
+        <p>Ваши блюда</p>
 
-        {entries.map((entry, index) => (
-          <FoodItem key={index}>
-            <FoodName>{entry.name}</FoodName>
-            <div>{entry.timestamp}</div>
-            <FoodDetails>
-              <span>{entry.calories} ккал</span>
-              <span>БЖУ: {entry.protein}/{entry.fat}/{entry.carbs}</span>
-            </FoodDetails>
-            <Button onClick={() => onDelete(index)}>Удалить блюдо</Button>
-          </FoodItem>
-        ))}
+        {entries.length === 0 ? (
+          <>
+            <p>Нет записей за этот день</p>
+            <Button onClick={handleAdd}>
+              Добавить блюдо
+            </Button>
+          </>
+        ) : (
+          entries.map((entry, index) => (
+            <FoodItem key={index}>
+              <FoodName>{entry.name}</FoodName>
+              <FoodDetails>{formatTime(entry.timestamp)}</FoodDetails>
+              <FoodDetails>{entry.calories} ккал</FoodDetails>
+              <MacroRow>
+                БЖУ: {entry.protein}/{entry.fat}/{entry.carbs}
+              </MacroRow>
+              <Button onClick={() => onDelete(index)}>
+                Удалить блюдо
+              </Button>
+            </FoodItem>
+          ))
+        )}
 
         <ModalActions>
-          <Button onClick={onClose}>Отменить изменения</Button>
-          <Button onClick={onSave}>Сохранить</Button>
+          <Button onClick={onClose}>
+            Отменить изменения
+          </Button>
+          <Button onClick={onSave} disabled={isSaveDisabled}>
+            Сохранить
+          </Button>
         </ModalActions>
       </ModalContent>
     </ModalOverlay>

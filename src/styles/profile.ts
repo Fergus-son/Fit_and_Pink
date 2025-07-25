@@ -1,16 +1,29 @@
 import styled from "styled-components";
 
-export const Section = styled.section`
-  padding: 1.5rem;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 1.5rem;
+export const SkeletonLine = styled.div<{ width?: string }>`
+  height: 1rem;
+  background: #eee;
+  border-radius: 4px;
+  width: ${props => props.width || '100%'};
+  animation: pulse 1.5s infinite;
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+`;
+
+export const SkeletonAvatar = styled.div`
+  width: 64px;
+  height: 64px
+  border-radius: 50%;
+  background: #eee;
+  animation: pulse 1.5s infinite;
 `;
 
 export const Avatar = styled.div`
-width: 64px;
-height: 64px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   background: #ccc;
   margin: 0 auto 8px;
@@ -41,16 +54,24 @@ export const InfoTitle = styled.div`
 export const InfoRow = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 6px 0;
   border-bottom: 1px solid #f0f0f0;
 `;
 
 export const InfoLabel = styled.div`
-  font-size: 14px;
-`;
+  flex: 0 0 50%;
+  font-weight: lighter;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;`;
 
 export const InfoValue = styled.div`
-  font-weight: bold;
+  flex: 0 0 50%;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const NormBox = styled.div`
@@ -71,6 +92,7 @@ export const NormValue = styled.div`
 `;
 
 export const EditButton = styled.button`
+  border: 1px solid #A259FF;
   background: #7d5bbe;
   color: white;
   padding: 10px;
@@ -78,9 +100,14 @@ export const EditButton = styled.button`
   border-radius: 8px;
   font-weight: bold;
   margin-top: 12px;
+
+  &:hover {
+    background:rgba(181, 125, 240, 0.83);
+  }
 `;
 
 export const OfferButton = styled.button`
+  border: 1px solid #A259FF;
   background: #f1e1d0;
   color: #7d5bbe;
   padding: 10px;
@@ -88,6 +115,10 @@ export const OfferButton = styled.button`
   border-radius: 8px;
   font-weight: bold;
   margin-top: 8px;
+
+  &:hover {
+    background: #f3e8ff;
+  }
 `;
 
 export const PoweredText = styled.div`
