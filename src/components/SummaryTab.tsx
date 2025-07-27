@@ -1,32 +1,21 @@
 import { useState, useEffect } from "react";
 import {
-  Section,
-  Box,
+  Card,
   Title,
-  CaloriesText,
+  ToggleContainer,
+  ToggleButton,
   MacrosGrid,
-  MacroBox,
-  MacroLabel,
+  MacroCard,
+  MacroTitle,
   MacroValue,
-  ToggleButtons,
-  ToggleButton
+  RemainingCalories,
+  RemainingTitle,
+  RemainingValue,
+  FiberCard,
 } from "../styles/summary";
-import {
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend
-} from "recharts";
-import { getEffectiveUserId, getUserId, tg } from "../telegram";
+import { ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import { getEffectiveUserId } from "../telegram";
 import { SkeletonLine, SkeletonChart } from "../styles/shared";
-// import { FoodEntry } from "./FoodHistoryModal";
-import { FoodHistoryModal } from "./FoodHistoryModal";
 
 interface NutritionData {
   consumedCalories: number;
@@ -35,263 +24,227 @@ interface NutritionData {
   fibers: { value: number; max: number };
   carbs: { value: number; max: number };
   fats: { value: number; max: number };
-  history: {
-    name: string;
-    calories: number;
-    protein: number;
-    fat: number;
-    carbs: number;
-    entries: FoodEntry[];
-  }[];
 }
 
-interface FoodEntry {
-  timestamp: string;
-  name: string;
-  calories: number;
-  protein: number;
-  fat: number;
-  carbs: number;
-  fiber: number;
-  weight: number;
-  meal_type: string;
+interface ChartProps {
+  type: "calories" | "macros";
+  data: NutritionData;
 }
+
+const renderCustomizedLabel = ({
+  cx,
+  cy,
+  type,
+  data,
+}: {
+  cx: number;
+  cy: number;
+  type: "calories" | "macros";
+  data: NutritionData;
+}) => {
+  return (
+    <g>
+      {type === "calories" ? (
+        <>
+          <text
+            x={cx}
+            y={cy - 10}
+            fill="#1C1C1E"
+            fontSize={24}
+            fontWeight={700}
+            textAnchor="middle"
+          >
+            {data.consumedCalories}
+          </text>
+          <text
+            x={cx}
+            y={cy + 15}
+            fill="#636366"
+            fontSize={14}
+            textAnchor="middle"
+          >
+            калорий
+          </text>
+        </>
+      ) : (
+        <>
+          <text
+            x={cx}
+            y={cy - 10}
+            fill="#1C1C1E"
+            fontSize={18}
+            fontWeight={600}
+            textAnchor="middle"
+          >
+            БЖУ
+          </text>
+          <text
+            x={cx}
+            y={cy + 15}
+            fill="#636366"
+            fontSize={14}
+            textAnchor="middle"
+          >
+            {data.proteins.value}/{data.fats.value}/{data.carbs.value}г
+          </text>
+        </>
+      )}
+    </g>
+  );
+};
+
+const NutritionChart = ({ type, data }: ChartProps) => {
+  const chartData =
+    type === "calories"
+      ? [
+          { name: "Потреблено", value: data.consumedCalories },
+          {
+            name: "Осталось",
+            value: Math.max(0, data.totalCalories - data.consumedCalories),
+          },
+        ]
+      : [
+          { name: "Белки", value: data.proteins.value },
+          { name: "Жиры", value: data.fats.value },
+          { name: "Углеводы", value: data.carbs.value },
+        ];
+
+  const colors =
+    type === "calories"
+      ? ["#6C5CE7", "#E4E4E6"]
+      : ["#6C5CE7", "#A259FF", "#AEA5F5"];
+
+  return (
+    <div style={{ position: "relative", height: "200px", margin: "16px 0" }}>
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Pie
+            data={chartData}
+            cx="50%"
+            cy="50%"
+            innerRadius={70}
+            outerRadius={90}
+            paddingAngle={0}
+            dataKey="value"
+            labelLine={false}
+            label={({ cx, cy }) =>
+              renderCustomizedLabel({ cx, cy, type, data })
+            }
+            cornerRadius={10}
+            stroke="none"
+          >
+            {chartData.map((entry, index) => (
+              <Cell 
+                key={`cell-${index}`} 
+                fill={colors[index % colors.length]}
+              />
+            ))}
+          </Pie>
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
+  );
+};
 
 export default function SummaryTab() {
-  const [macroTab, setMacroTab] = useState<"calories" | "macros">("calories");
+  const [activeTab, setActiveTab] = useState<"calories" | "macros">("calories");
   const [nutritionData, setNutritionData] = useState<NutritionData | null>(null);
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [selectedDateEntries, setSelectedDateEntries] = useState<FoodEntry[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchNutritionData = async () => {
-      const userId = getEffectiveUserId()
+      const userId = getEffectiveUserId();
       try {
+        setIsLoading(true);
         const response = await fetch(`/api/nutrition?userId=${userId}`);
         const data = await response.json();
         setNutritionData(data);
       } catch (error) {
         console.error("Failed to fetch nutrition data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchNutritionData();
   }, []);
 
-  const pieData = nutritionData ? [
-    { name: "Consumed", value: nutritionData.consumedCalories },
-    { name: "Remaining", value: nutritionData.totalCalories - nutritionData.consumedCalories },
-  ] : [];
-
-  const COLORS = ["#f88", "#fdd"];
-
-  const macroData = nutritionData ? [
-    { label: "Белок", value: nutritionData.proteins.value, max: nutritionData.proteins.max },
-    { label: "Клетчатка", value: nutritionData.fibers.value, max: nutritionData.fibers.max },
-    { label: "Углеводы", value: nutritionData.carbs.value, max: nutritionData.carbs.max },
-    { label: "Жиры", value: nutritionData.fats.value, max: nutritionData.fats.max },
-  ] : [];
-
-  const handleBarClick = (data: any) => {
-    if (!data || !data.payload ) return;
-
-    const clickedItem = data.payload;
-    setSelectedDate(clickedItem.name);
-    setSelectedDateEntries(
-      clickedItem.entries?.map((entry: any) => ({
-        timestamp: entry.timestamp || new Date().toISOString(),
-        name: entry.name,
-        calories: entry.calories,
-        protein: entry.protein,
-        fat: entry.fat,
-        carbs: entry.carbs
-      })) || []
+  if (isLoading) {
+    return (
+      <Card>
+        <SkeletonLine width="60%" height="1.5rem" style={{ margin: "16px auto" }} />
+        <SkeletonChart height="200px" />
+      </Card>
     );
-  };
-
-  const handleSave = async () => {
-  try {
-    const userId = getEffectiveUserId();
-    const response = await fetch(`/api/nutrition/update`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userId,
-        date: selectedDate,
-        entries: selectedDateEntries,
-      }),
-    });
-
-    if (!response.ok) throw new Error("Ошибка сохранения");
-    setSelectedDate(null); // Закрываем модальное окно после успеха
-  } catch (error) {
-    console.error("Ошибка:", error);
   }
-};
 
-const handleDelete = async (index: number) => {
-  try {
-    const userId = getEffectiveUserId();
-    const entryToDelete = selectedDateEntries[index];
-    
-    // Удаляем запись на сервере
-    const response = await fetch(`/api/nutrition/delete`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userId,
-        timestamp: entryToDelete.timestamp,
-      }),
-    });
-
-    if (!response.ok) throw new Error("Ошибка удаления");
-
-    // Обновляем локальное состояние
-    const newEntries = [...selectedDateEntries];
-    newEntries.splice(index, 1);
-    setSelectedDateEntries(newEntries);
-  } catch (error) {
-    console.error("Ошибка:", error);
+  if (!nutritionData) {
+    return <Card>Ошибка загрузки данных</Card>;
   }
-};
-
-  // const handleSave = () => {
-  //   console.log("Changes saved");
-  //   setSelectedDate(null);
-  // };
-
-  // const handleDelete = (index: number) => {
-  //   const newEntries = [...selectedDateEntries];
-  //   newEntries.splice(index, 1);
-  //   setSelectedDateEntries(newEntries);
-  // };
 
   return (
-    <Section>
-      <Box>
-        <Title>Ежедневный обзор калорий</Title>
-        {nutritionData ? (
-          <>
-            <CaloriesText>{nutritionData.consumedCalories} ккал / {nutritionData.totalCalories} ккал</CaloriesText>
-            <ResponsiveContainer width="100%" height={150}>
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={35}
-                  outerRadius={50}
-                  dataKey="value"
-                  labelLine={false}
-                >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index]} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-          </>
-        ) : (
-          <>
-            <SkeletonLine width="60%" height="1.5rem" style={{ marginBottom: '16px' }} />
-            <SkeletonChart height="150px" />
-          </>
-        )}
-      </Box>
+    <Card>
+      <Title>Ежедневный обзор питания</Title>
 
-      <Title>Мини-графики БЖУ</Title>
-      <MacrosGrid>
-        {nutritionData ? (
-          macroData.map((m) => (
-            <MacroBox key={m.label}>
-              <MacroLabel>{m.label}</MacroLabel>
-              <MacroValue>
-                {m.value} г / {m.max} г
-              </MacroValue>
-            </MacroBox>
-          ))
-        ) : (
-          Array(4).fill(0).map((_, i) => (
-            <MacroBox key={i}>
-              <MacroLabel><SkeletonLine width="80%" /></MacroLabel>
-              <MacroValue><SkeletonLine width="60%" /></MacroValue>
-            </MacroBox>
-          ))
-        )}
-      </MacrosGrid>
-
-      <ToggleButtons>
+      <ToggleContainer>
         <ToggleButton
-          active={macroTab === "macros"}
-          onClick={() => setMacroTab("macros")}
+          active={activeTab === "macros"}
+          onClick={() => setActiveTab("macros")}
         >
           БЖУ
         </ToggleButton>
         <ToggleButton
-          active={macroTab === "calories"}
-          onClick={() => setMacroTab("calories")}
+          active={activeTab === "calories"}
+          onClick={() => setActiveTab("calories")}
         >
           Калории
         </ToggleButton>
-      </ToggleButtons>
+      </ToggleContainer>
 
-      <Title>История потребления</Title>
-      {nutritionData ? (
-        <ResponsiveContainer width="100%" height={200}>
-          <BarChart data={nutritionData.history}>
-            <XAxis dataKey="name" />
-            <YAxis hide />
-            <Tooltip />
-            <Legend />
-            {macroTab === "calories" ? (
-              <Bar
-                dataKey="calories"
-                name="Калории"
-                fill="#ffc085"
-                radius={[4, 4, 0, 0]}
-                onClick={handleBarClick}
-              />
-            ) : (
-              <>
-                <Bar
-                  dataKey="proteins"
-                  name="Белки"
-                  fill="#8884d8"
-                  radius={[4, 4, 0, 0]}
-                  onClick={handleBarClick}
-                />
-                <Bar
-                  dataKey="fats"
-                  name="Жиры"
-                  fill="#82ca9d"
-                  radius={[4, 4, 0, 0]}
-                  onClick={handleBarClick}
-                />
-                <Bar
-                  dataKey="carbs"
-                  name="Углеводы"
-                  fill="#ffc658"
-                  radius={[4, 4, 0, 0]}
-                  onClick={handleBarClick}
-                />
-              </>
-            )}
-          </BarChart>
-        </ResponsiveContainer>
-      ) : (
-        <SkeletonChart height="150px" />
+      <NutritionChart type={activeTab} data={nutritionData} />
+
+      {activeTab === "calories" && (
+        <RemainingCalories>
+          <RemainingTitle>Осталось</RemainingTitle>
+          <RemainingValue>
+            {nutritionData.totalCalories - nutritionData.consumedCalories} калорий
+          </RemainingValue>
+          <div style={{ color: "#636366", fontSize: 14, marginTop: 4 }}>
+            {nutritionData.consumedCalories} из {nutritionData.totalCalories}
+          </div>
+        </RemainingCalories>
       )}
 
-      {selectedDate !== null && (
-        <FoodHistoryModal
-          date={selectedDate}
-          entries={selectedDateEntries}
-          onClose={() => setSelectedDate(null)}
-          onSave={handleSave}
-          onDelete={handleDelete}
-          isSaveDisabled={selectedDateEntries.length === 0}
-        />
+      {activeTab === "macros" && (
+        <>
+          <MacrosGrid>
+            <MacroCard>
+              <MacroTitle>Белки</MacroTitle>
+              <MacroValue>
+                {nutritionData.proteins.value}г / {nutritionData.proteins.max}г
+              </MacroValue>
+            </MacroCard>
+            <MacroCard>
+              <MacroTitle>Жиры</MacroTitle>
+              <MacroValue>
+                {nutritionData.fats.value}г / {nutritionData.fats.max}г
+              </MacroValue>
+            </MacroCard>
+            <MacroCard>
+              <MacroTitle>Углеводы</MacroTitle>
+              <MacroValue>
+                {nutritionData.carbs.value}г / {nutritionData.carbs.max}г
+              </MacroValue>
+            </MacroCard>
+          </MacrosGrid>
+          <FiberCard>
+            <MacroTitle>Клетчатка</MacroTitle>
+            <MacroValue>
+              {nutritionData.fibers.value}г / {nutritionData.fibers.max}г
+            </MacroValue>
+          </FiberCard>
+        </>
       )}
-    </Section>
+    </Card>
   );
 }

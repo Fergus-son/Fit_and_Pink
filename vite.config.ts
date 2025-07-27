@@ -12,5 +12,14 @@ export default defineConfig({
         summary: 'summary.html'
       }
     }
-  }
+  },
+  server: {
+    proxy: {
+      // Проксировать все запросы, начинающиеся с `/api`
+      '/api': {
+        target: 'http://localhost:3001', // Ваш mock-сервер
+        changeOrigin: true,
+      },
+    },
+  },
 })

@@ -2,6 +2,34 @@ import React, { useEffect, useState } from "react";
 import { UserStats } from "../types";
 import { getEffectiveUserId, getUserId, tg } from "../telegram";
 import { SkeletonLine } from "../styles/shared";
+import styled from "styled-components";
+
+export const StatsContainer = styled.div`
+  background: white;
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 16px;
+`;
+
+export const StatsTitle = styled.h2`
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #333;
+`;
+
+export const StatsItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+`;
 
 const CalorieStats: React.FC = () => {
   const [stats, setStats] = useState<UserStats | null>(null);

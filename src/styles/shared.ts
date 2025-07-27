@@ -22,28 +22,41 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #fff;
-  font-family: sans-serif;
+  background: #F7F8FA;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 `;
 
 export const Section = styled.div`
   padding: 16px;
   flex: 1;
   overflow-y: auto;
+  background: #F7F8FA;
 `;
 
 export const BottomNav = styled.div`
   display: flex;
   justify-content: space-around;
-  border-top: 1px solid #eee;
-  background: #fff;
+  padding: 12px 0;
+  background: #FFFFFF;
+  box-shadow: 0px -2px 8px rgba(0, 0, 0, 0.05);
+  border-top: 1px solid #F2F2F7;
 `;
 
 export const NavItem = styled.div<{ active: boolean }>`
-  flex: 1;
-  padding: 8px;
-  text-align: center;
-  color: ${(props) => (props.active ? "#000" : "#888")};
-  font-weight: ${(props) => (props.active ? "bold" : "normal")};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: ${props => props.active ? '#6C5CE7' : '#8E8E93'};
+  font-size: 12px;
+  font-weight: ${props => props.active ? '600' : '500'};
+  gap: 4px;
+  
+  &::before {
+    content: "${props => props.active ? '📊' : '📈'}";
+    font-size: 24px;
+  }
+  
+  &:last-child::before {
+    content: "${props => props.active ? '👤' : '👥'}";
+  }
 `;
-
