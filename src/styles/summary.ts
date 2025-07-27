@@ -1,7 +1,15 @@
 import styled from "styled-components";
 
+
+export const FirstItem = styled.div`
+  margin-bottom: 120px;
+`
+
+export const SecondItem = styled.p`
+`
+
 export const Card = styled.div`
-  background: #FFFFFF;
+  background: #EADAC8;
   border-radius: 16px;
   padding: 16px;
   margin-bottom: 16px;
@@ -58,9 +66,9 @@ export const MacroTitle = styled.div`
 `;
 
 export const MacroValue = styled.div`
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 600;
-  color: #1C1C1E;
+  color: #F2971C;
 `;
 
 export const RemainingCalories = styled.div`
@@ -89,4 +97,37 @@ export const FiberCard = styled.div`
   padding: 12px;
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
   margin-top: 8px;
+`;
+
+
+
+export const MacrosContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 0fr;
+  align-items: center;
+
+  @media (max-width: 480px) {
+    gap: 10px;
+  }
+`;
+
+export const MacrosInfo = styled.div`
+  background: #EADAC8;
+  border-radius: 12px;
+`;
+
+export const MacroItem = styled.div`
+  margin-bottom: 12px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+export const MacroName = styled.div`
+  font-size: 5px;
+  font-weight: 500;
+  font-size: clamp(22px, 2vw, 16px);
+  color: #333;
+  line-height: normal;
 `;

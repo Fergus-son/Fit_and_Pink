@@ -3,7 +3,7 @@ import { createGlobalStyle } from 'styled-components';
 const GlobalStyles = createGlobalStyle`
   /* Базовые сбросы и ограничения */
   html, body, #root {
-    min-width: 200px !important;
+    min-width: 340px !important;
     width: 100vw;
     overflow-x: hidden;
     margin: 0;
@@ -19,11 +19,11 @@ const GlobalStyles = createGlobalStyle`
   }
 
   /* Принудительное масштабирование для очень маленьких экранов */
-  @media (max-width: 340px) {
+  @media (max-width: 350px) {
     html {
       transform: scale(0.9);
       transform-origin: top left;
-      width: 340px;
+      width: 350px;
     }
 
     body {

@@ -24,12 +24,12 @@ let userData = {
 };
 
 let nutritionData = {
-  consumedCalories: 1500,
+  consumedCalories: 1900,
   totalCalories: 2000,
-  proteins: { value: 120, max: 150 },
+  proteins: { value: 70, max: 150 },
   fibers: { value: 25, max: 30 },
-  carbs: { value: 150, max: 200 },
-  fats: { value: 50, max: 65 },
+  carbs: { value: 145, max: 200 },
+  fats: { value: 35, max: 65 },
   history: [
     { 
       name: "Пн", 

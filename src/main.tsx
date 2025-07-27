@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { initTelegram } from './telegram'
+import GlobalStyles from './styles/global'
 
 // Определяем тип приложения по URL
 const appType = () => {
@@ -33,6 +34,7 @@ async function initializeApp() {
   ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
       <AppComponent />
+      <GlobalStyles />
     </React.StrictMode>
   )
 }

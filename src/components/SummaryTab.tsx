@@ -4,18 +4,16 @@ import {
   Title,
   ToggleContainer,
   ToggleButton,
-  MacrosGrid,
-  MacroCard,
-  MacroTitle,
   MacroValue,
-  RemainingCalories,
-  RemainingTitle,
-  RemainingValue,
-  FiberCard,
+  MacroItem,
+  MacrosInfo,
+  MacrosContainer,
+  MacroName,
+  FirstItem,
+  SecondItem,
 } from "../styles/summary";
 import { ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { getEffectiveUserId } from "../telegram";
-import { SkeletonLine, SkeletonChart } from "../styles/shared";
 
 interface NutritionData {
   consumedCalories: number;
@@ -93,57 +91,139 @@ const renderCustomizedLabel = ({
   );
 };
 
+
 const NutritionChart = ({ type, data }: ChartProps) => {
-  const chartData =
-    type === "calories"
-      ? [
-          { name: "Потреблено", value: data.consumedCalories },
-          {
-            name: "Осталось",
-            value: Math.max(0, data.totalCalories - data.consumedCalories),
-          },
-        ]
-      : [
-          { name: "Белки", value: data.proteins.value },
-          { name: "Жиры", value: data.fats.value },
-          { name: "Углеводы", value: data.carbs.value },
-        ];
+ const colors = type === "calories"
+  ? ["#F2971C"] 
+  : ["#6B5E8E", "#F2971C", "#708C5F"];
 
-  const colors =
-    type === "calories"
-      ? ["#6C5CE7", "#E4E4E6"]
-      : ["#6C5CE7", "#A259FF", "#AEA5F5"];
+  if (type === "calories") {
+    const chartData = [
+      { name: "Потреблено", value: data.consumedCalories },
+      { name: "Осталось", value: Math.max(0, data.totalCalories - data.consumedCalories) },
+    ];
+    const infoData = [
+      { name: "Осталось", value: Math.max(0, data.totalCalories - data.consumedCalories) },
+      { name: "Клетчатка", value: data.fibers.value, max: data.fibers.max },
+    ];
 
-  return (
-    <div style={{ position: "relative", height: "200px", margin: "16px 0" }}>
-      <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
-          <Pie
-            data={chartData}
-            cx="50%"
-            cy="50%"
-            innerRadius={70}
-            outerRadius={90}
-            paddingAngle={0}
-            dataKey="value"
-            labelLine={false}
-            label={({ cx, cy }) =>
-              renderCustomizedLabel({ cx, cy, type, data })
-            }
-            cornerRadius={10}
-            stroke="none"
-          >
-            {chartData.map((entry, index) => (
-              <Cell 
-                key={`cell-${index}`} 
-                fill={colors[index % colors.length]}
-              />
-            ))}
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
-    </div>
-  );
+
+    return (
+
+      <MacrosContainer>
+        <MacrosInfo>
+            <FirstItem>
+              <MacroValue>
+                {infoData[0].value} калории
+              </MacroValue>
+              <MacroName>{infoData[0].name}</MacroName>
+            </FirstItem>
+            <SecondItem>
+              <MacroName>{infoData[1].name}</MacroName>
+              <MacroValue>
+                {infoData[1].value}г/{infoData[1].max}г
+              </MacroValue>
+            </SecondItem>
+        </MacrosInfo>
+
+      <div style={{
+          position: "relative",
+          height: "200px",
+          width: "100%",
+          minWidth: "180px",
+          // marginLeft: "auto", // Выравнивание по правому краю
+      }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            
+            <Pie
+              data={chartData}
+              cx="50%"
+              cy="50%"
+              innerRadius={60}
+              outerRadius={90}
+              paddingAngle={0}
+              dataKey="value"
+              labelLine={false}
+              label={({ cx, cy }) => renderCustomizedLabel({ cx, cy, type, data })}
+              cornerRadius={30}
+              stroke="none"
+              startAngle={65}
+              endAngle={450}
+            >
+              <Cell key="cell-consumed" fill={colors[0]} />
+              <Cell key="cell-remaining" fill="#EADAC8" />
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+    </MacrosContainer>
+    );
+  } else {
+    const macros = [
+      { name: "Белки", value: data.proteins.value, max: data.proteins.max },
+      { name: "Жиры", value: data.fats.value, max: data.fats.max },
+      { name: "Углеводы", value: data.carbs.value, max: data.carbs.max },
+    ];
+
+    return (
+      <MacrosContainer>
+        <MacrosInfo>
+          {macros.map((macro) => (
+            <MacroItem key={macro.name}>
+              <MacroName>{macro.name}</MacroName>
+              <MacroValue>
+                {macro.value}г/{macro.max}г
+              </MacroValue>
+            </MacroItem>
+          ))}
+        </MacrosInfo>
+
+        <div style={{
+          position: "relative",
+          height: "200px",
+          width: "100%",
+          minWidth: "180px",
+          marginLeft: "auto", // Выравнивание по правому краю
+        }}>
+          <ResponsiveContainer width="100%" height="100%" >
+            <PieChart>
+              {macros.map((macro, index) => {
+                const chartData = [
+                  { name: "Потреблено", value: macro.value },
+                  { name: "Осталось", value: Math.max(0, macro.max - macro.value) },
+                ];
+
+                const outerRadius = 40 + index * 24;
+                const innerRadius = outerRadius - 22;
+
+                return (
+                  <Pie
+                    key={`pie-${index}`}
+                    data={chartData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={innerRadius}
+                    outerRadius={outerRadius}
+                    paddingAngle={0}
+                    dataKey="value"
+                    labelLine={false}
+                    cornerRadius={30}
+                    stroke="none"
+                    startAngle={65}
+                    endAngle={450}
+                  >
+                    <Cell key={`cell-${index}-consumed`} fill={colors[index]} />
+                    <Cell key={`cell-${index}-remaining`} fill="#EADAC8" />
+                  </Pie>
+                );
+              })}
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </MacrosContainer>
+    );
+  }
 };
 
 export default function SummaryTab() {
@@ -169,82 +249,31 @@ export default function SummaryTab() {
     fetchNutritionData();
   }, []);
 
-  if (isLoading) {
-    return (
-      <Card>
-        <SkeletonLine width="60%" height="1.5rem" style={{ margin: "16px auto" }} />
-        <SkeletonChart height="200px" />
-      </Card>
-    );
-  }
-
   if (!nutritionData) {
     return <Card>Ошибка загрузки данных</Card>;
   }
 
   return (
-    <Card>
-      <Title>Ежедневный обзор питания</Title>
+    <>
+        <Title>Ежедневный обзор питания</Title>
+        <ToggleContainer>
+          <ToggleButton
+            active={activeTab === "macros"}
+            onClick={() => setActiveTab("macros")}
+          >
+            БЖУ
+          </ToggleButton>
+          <ToggleButton
+            active={activeTab === "calories"}
+            onClick={() => setActiveTab("calories")}
+          >
+            Калории
+          </ToggleButton>
+        </ToggleContainer>
 
-      <ToggleContainer>
-        <ToggleButton
-          active={activeTab === "macros"}
-          onClick={() => setActiveTab("macros")}
-        >
-          БЖУ
-        </ToggleButton>
-        <ToggleButton
-          active={activeTab === "calories"}
-          onClick={() => setActiveTab("calories")}
-        >
-          Калории
-        </ToggleButton>
-      </ToggleContainer>
-
-      <NutritionChart type={activeTab} data={nutritionData} />
-
-      {activeTab === "calories" && (
-        <RemainingCalories>
-          <RemainingTitle>Осталось</RemainingTitle>
-          <RemainingValue>
-            {nutritionData.totalCalories - nutritionData.consumedCalories} калорий
-          </RemainingValue>
-          <div style={{ color: "#636366", fontSize: 14, marginTop: 4 }}>
-            {nutritionData.consumedCalories} из {nutritionData.totalCalories}
-          </div>
-        </RemainingCalories>
-      )}
-
-      {activeTab === "macros" && (
-        <>
-          <MacrosGrid>
-            <MacroCard>
-              <MacroTitle>Белки</MacroTitle>
-              <MacroValue>
-                {nutritionData.proteins.value}г / {nutritionData.proteins.max}г
-              </MacroValue>
-            </MacroCard>
-            <MacroCard>
-              <MacroTitle>Жиры</MacroTitle>
-              <MacroValue>
-                {nutritionData.fats.value}г / {nutritionData.fats.max}г
-              </MacroValue>
-            </MacroCard>
-            <MacroCard>
-              <MacroTitle>Углеводы</MacroTitle>
-              <MacroValue>
-                {nutritionData.carbs.value}г / {nutritionData.carbs.max}г
-              </MacroValue>
-            </MacroCard>
-          </MacrosGrid>
-          <FiberCard>
-            <MacroTitle>Клетчатка</MacroTitle>
-            <MacroValue>
-              {nutritionData.fibers.value}г / {nutritionData.fibers.max}г
-            </MacroValue>
-          </FiberCard>
-        </>
-      )}
-    </Card>
+      <Card>
+        <NutritionChart type={activeTab} data={nutritionData} />
+      </Card>
+    </>
   );
 }
