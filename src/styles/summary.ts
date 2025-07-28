@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 
 export const FirstItem = styled.div`
-  margin-bottom: 120px;
+  margin-bottom: 88px;
 `
 
 export const SecondItem = styled.p`
@@ -47,7 +47,7 @@ export const ToggleButton = styled.button<{ active: boolean }>`
 
 export const MacrosGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 0fr 1fr;
   gap: 12px;
   margin: 16px 0;
 `;
@@ -66,7 +66,7 @@ export const MacroTitle = styled.div`
 `;
 
 export const MacroValue = styled.div`
-  font-size: 20px;
+  font-size: 28;
   font-weight: 600;
   color: #F2971C;
 `;
@@ -101,9 +101,9 @@ export const FiberCard = styled.div`
 
 
 
-export const MacrosContainer = styled.div`
+export const StatsContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 0fr;
+  grid-template-columns: 80px 0fr;
   align-items: center;
 
   @media (max-width: 480px) {
@@ -111,7 +111,7 @@ export const MacrosContainer = styled.div`
   }
 `;
 
-export const MacrosInfo = styled.div`
+export const StatsInfo = styled.div`
   background: #EADAC8;
   border-radius: 12px;
 `;
@@ -119,15 +119,45 @@ export const MacrosInfo = styled.div`
 export const MacroItem = styled.div`
   margin-bottom: 12px;
 
-  &:last-child {
-    margin-bottom: 0;
-  }
 `;
 
 export const MacroName = styled.div`
-  font-size: 5px;
+  font-size: 25;
   font-weight: 500;
-  font-size: clamp(22px, 2vw, 16px);
   color: #333;
   line-height: normal;
+`;
+
+
+
+export const CalorieName = styled.div`
+  font-size: 25;
+  font-weight: 500;
+  color: #333;
+  line-height: normal;
+`;
+
+export const CalorieValue = styled.div`
+  font-size: 28;
+  font-weight: 600;
+  color: #F2971C;
+`;
+
+export const FibersValue = styled.div`
+  font-size: 28;
+  font-weight: 600;
+  color: #323232;
+  opacity: 0.6;
+`;
+
+export const PieCalorieStyle = styled.div`
+  position: relative;
+  height: 200px;
+  width: 190px;
+`;
+
+export const PieMacrosStyle = styled.div`
+  position: relative;
+  height: 200px;
+  width: 190px;
 `;

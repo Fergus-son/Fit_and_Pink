@@ -6,11 +6,16 @@ import {
   ToggleButton,
   MacroValue,
   MacroItem,
-  MacrosInfo,
-  MacrosContainer,
   MacroName,
   FirstItem,
   SecondItem,
+  StatsContainer,
+  StatsInfo,
+  CalorieValue,
+  CalorieName,
+  FibersValue,
+  PieMacrosStyle,
+  PieCalorieStyle,
 } from "../styles/summary";
 import { ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { getEffectiveUserId } from "../telegram";
@@ -110,29 +115,23 @@ const NutritionChart = ({ type, data }: ChartProps) => {
 
     return (
 
-      <MacrosContainer>
-        <MacrosInfo>
+      <StatsContainer>
+        <StatsInfo>
             <FirstItem>
-              <MacroValue>
+              <CalorieValue>
                 {infoData[0].value} калории
-              </MacroValue>
-              <MacroName>{infoData[0].name}</MacroName>
+              </CalorieValue>
+              <CalorieName>{infoData[0].name}</CalorieName>
             </FirstItem>
             <SecondItem>
-              <MacroName>{infoData[1].name}</MacroName>
-              <MacroValue>
+              <CalorieName>{infoData[1].name}</CalorieName>
+              <FibersValue>
                 {infoData[1].value}г/{infoData[1].max}г
-              </MacroValue>
+              </FibersValue>
             </SecondItem>
-        </MacrosInfo>
+        </StatsInfo>
 
-      <div style={{
-          position: "relative",
-          height: "200px",
-          width: "100%",
-          minWidth: "180px",
-          // marginLeft: "auto", // Выравнивание по правому краю
-      }}>
+      <PieCalorieStyle>
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             
@@ -156,8 +155,8 @@ const NutritionChart = ({ type, data }: ChartProps) => {
             </Pie>
           </PieChart>
         </ResponsiveContainer>
-      </div>
-    </MacrosContainer>
+      </PieCalorieStyle>
+    </StatsContainer>
     );
   } else {
     const macros = [
@@ -167,8 +166,8 @@ const NutritionChart = ({ type, data }: ChartProps) => {
     ];
 
     return (
-      <MacrosContainer>
-        <MacrosInfo>
+      <StatsContainer>
+        <StatsInfo>
           {macros.map((macro) => (
             <MacroItem key={macro.name}>
               <MacroName>{macro.name}</MacroName>
@@ -177,15 +176,9 @@ const NutritionChart = ({ type, data }: ChartProps) => {
               </MacroValue>
             </MacroItem>
           ))}
-        </MacrosInfo>
+        </StatsInfo>
 
-        <div style={{
-          position: "relative",
-          height: "200px",
-          width: "100%",
-          minWidth: "180px",
-          marginLeft: "auto", // Выравнивание по правому краю
-        }}>
+        <PieMacrosStyle>
           <ResponsiveContainer width="100%" height="100%" >
             <PieChart>
               {macros.map((macro, index) => {
@@ -220,8 +213,8 @@ const NutritionChart = ({ type, data }: ChartProps) => {
               })}
             </PieChart>
           </ResponsiveContainer>
-        </div>
-      </MacrosContainer>
+        </PieMacrosStyle>
+      </StatsContainer>
     );
   }
 };

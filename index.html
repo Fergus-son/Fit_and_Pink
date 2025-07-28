@@ -12,20 +12,6 @@
 <body>
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
-<script>
-  // Локальная заглушка для Telegram.WebApp
-  if (!window.Telegram?.WebApp) {
-    window.Telegram = {
-      WebApp: {
-        initData: '',
-        initDataUnsafe: { user: { id: 12345, first_name: "Local", last_name: "User" } },
-        themeParams: {},
-        ready: () => {},
-        expand: () => {},
-      },
-    };
-  }
-</script>
 </body>
 
 </html>
