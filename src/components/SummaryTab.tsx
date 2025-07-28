@@ -139,8 +139,8 @@ const NutritionChart = ({ type, data }: ChartProps) => {
               data={chartData}
               cx="50%"
               cy="50%"
-              innerRadius={60}
-              outerRadius={90}
+              innerRadius={70}
+              outerRadius={105}
               paddingAngle={0}
               dataKey="value"
               labelLine={false}

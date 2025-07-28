@@ -2,21 +2,20 @@ import styled from "styled-components";
 
 
 export const FirstItem = styled.div`
-  margin-bottom: 88px;
+  margin-bottom: 100px;
 `
 
-export const SecondItem = styled.p`
+export const SecondItem = styled.div`
 `
 
 export const Card = styled.div`
   background: #EADAC8;
   border-radius: 16px;
-  padding: 16px;
+  padding: 8px;
   margin-bottom: 16px;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
 `;
 
-export const Title = styled.h2`
+export const Title = styled.div`
   font-size: 18px;
   font-weight: 600;
   color: #1C1C1E;
@@ -46,17 +45,15 @@ export const ToggleButton = styled.button<{ active: boolean }>`
 `;
 
 export const MacrosGrid = styled.div`
-  display: grid;
-  grid-template-columns: 0fr 1fr;
   gap: 12px;
   margin: 16px 0;
+  width: 100%;
 `;
 
 export const MacroCard = styled.div`
   background: #FFFFFF;
   border-radius: 12px;
   padding: 12px;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
 `;
 
 export const MacroTitle = styled.div`
@@ -95,20 +92,17 @@ export const FiberCard = styled.div`
   background: #FFFFFF;
   border-radius: 12px;
   padding: 12px;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
   margin-top: 8px;
 `;
 
 
 
+// display: flex;
 export const StatsContainer = styled.div`
   display: grid;
-  grid-template-columns: 80px 0fr;
+  grid-template-columns: 1fr 1fr;
+  jusify-content: space-between;
   align-items: center;
-
-  @media (max-width: 480px) {
-    gap: 10px;
-  }
 `;
 
 export const StatsInfo = styled.div`
@@ -152,12 +146,17 @@ export const FibersValue = styled.div`
 
 export const PieCalorieStyle = styled.div`
   position: relative;
-  height: 200px;
-  width: 190px;
+  width: 220px;
+  max-width: 250px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
 `;
 
 export const PieMacrosStyle = styled.div`
   position: relative;
-  height: 200px;
-  width: 190px;
+  position-area: right;
+  width: 220px;
+  max-width: 250px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
 `;
