@@ -149,6 +149,10 @@ export const PieCalorieStyle = styled.div`
   max-width: 250px;
   aspect-ratio: 1 / 1;
   margin: 0 auto;
+
+    @media (max-width: 360px) {
+    width: 210px; /* или любое другое значение, например, 300px */
+  }
 `;
 
 export const PieMacrosStyle = styled.div`
@@ -158,4 +162,8 @@ export const PieMacrosStyle = styled.div`
   max-width: 250px;
   aspect-ratio: 1 / 1;
   margin: 0 auto;
+
+    @media (max-width: 360px) {
+    width: 210px; /* или любое другое значение, например, 300px */
+  }
 `;
