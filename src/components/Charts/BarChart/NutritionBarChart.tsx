@@ -40,18 +40,10 @@ interface NutritionData {
 
 
 export const NutritionBarChart = ({ type, data }: ChartProps) => {
-const [nutritionData, setNutritionData] = useState<NutritionData | null>(null);
-
-    const macroData = nutritionData ? [
-    { label: "Белок", value: nutritionData.proteins.value, max: nutritionData.proteins.max },
-    { label: "Клетчатка", value: nutritionData.fibers.value, max: nutritionData.fibers.max },
-    { label: "Углеводы", value: nutritionData.carbs.value, max: nutritionData.carbs.max },
-    { label: "Жиры", value: nutritionData.fats.value, max: nutritionData.fats.max },
-  ] : [];
-
   return (
     <>
         <ResponsiveContainer width="100%" height={200}>
+          {/* barCategoryGap="15%" // Настройка расстояния между столбцами (15% от ширины столбца) */}
           <BarChart data={data.history}>
             <XAxis dataKey="name" />
             <YAxis hide />
