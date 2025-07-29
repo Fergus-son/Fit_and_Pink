@@ -55,18 +55,6 @@ export const MacroCard = styled.div`
   padding: 12px;
 `;
 
-export const MacroTitle = styled.div`
-  font-size: 14px;
-  color: #636366;
-  margin-bottom: 4px;
-`;
-
-export const MacroValue = styled.div`
-  font-size: 28;
-  font-weight: 600;
-  color: #F2971C;
-`;
-
 export const RemainingCalories = styled.div`
   text-align: center;
   margin: 16px 0;
@@ -111,17 +99,18 @@ export const StatsInfo = styled.div`
 
 export const MacroItem = styled.div`
   margin-bottom: 12px;
-
 `;
 
 export const MacroName = styled.div`
-  font-size: 25;
+  font-size: 18px;
   font-weight: 500;
-  color: #333;
-  line-height: normal;
 `;
 
-
+export const MacroValue = styled.div`
+  font-size: 18px;
+  font-weight: 600;
+  color: #6E6E6E;
+`;
 
 export const CalorieName = styled.div`
   font-size: 25;
@@ -131,13 +120,14 @@ export const CalorieName = styled.div`
 `;
 
 export const CalorieValue = styled.div`
-  font-size: 28;
+  font-size: 18px;
   font-weight: 600;
   color: #F2971C;
+  margin-bottom: 5px;
 `;
 
 export const FibersValue = styled.div`
-  font-size: 28;
+  font-size: 18px;
   font-weight: 600;
   color: #323232;
   opacity: 0.6;
@@ -151,19 +141,18 @@ export const PieCalorieStyle = styled.div`
   margin: 0 auto;
 
     @media (max-width: 360px) {
-    width: 210px; /* или любое другое значение, например, 300px */
+    width: 199px; /* или любое другое значение, например, 300px */
   }
 `;
 
 export const PieMacrosStyle = styled.div`
   position: relative;
-  position-area: right;
   width: 220px;
   max-width: 250px;
   aspect-ratio: 1 / 1;
   margin: 0 auto;
 
     @media (max-width: 360px) {
-    width: 210px; /* или любое другое значение, например, 300px */
+    width: 205px; /* или любое другое значение, например, 300px */
   }
 `;

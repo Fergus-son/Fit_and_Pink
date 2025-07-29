@@ -28,8 +28,8 @@ let nutritionData = {
   totalCalories: 2000,
   proteins: { value: 148, max: 150 },
   fibers: { value: 25, max: 30 },
-  carbs: { value: 198, max: 200 },
-  fats: { value: 64, max: 65 },
+  carbs: { value: 70, max: 200 },
+  fats: { value: 33, max: 65 },
   history: [
     { 
       name: "Пн", 

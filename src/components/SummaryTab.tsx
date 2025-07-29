@@ -98,9 +98,9 @@ const renderCustomizedLabel = ({
 
 
 const NutritionChart = ({ type, data }: ChartProps) => {
- const colors = type === "calories"
-  ? ["#F2971C"] 
-  : ["#6B5E8E", "#F2971C", "#708C5F"];
+  const colors = type === "calories"
+    ? ["#F2971C"]
+    : ["#708C5F", "#F2971C", "#6B5E8E"];
 
   if (type === "calories") {
     const chartData = [
@@ -117,65 +117,68 @@ const NutritionChart = ({ type, data }: ChartProps) => {
 
       <StatsContainer>
         <StatsInfo>
-            <FirstItem>
-              <CalorieValue>
-                {infoData[0].value} калории
-              </CalorieValue>
-              <CalorieName>{infoData[0].name}</CalorieName>
-            </FirstItem>
-            <SecondItem>
-              <CalorieName>{infoData[1].name}</CalorieName>
-              <FibersValue>
-                {infoData[1].value}г/{infoData[1].max}г
-              </FibersValue>
-            </SecondItem>
+          <FirstItem>
+            <CalorieValue>
+              {infoData[0].value} калории
+            </CalorieValue>
+            <CalorieName>{infoData[0].name}</CalorieName>
+          </FirstItem>
+          <SecondItem>
+            <CalorieName>{infoData[1].name}</CalorieName>
+            <FibersValue>
+              {infoData[1].value}г/{infoData[1].max}г
+            </FibersValue>
+          </SecondItem>
         </StatsInfo>
 
-      <PieCalorieStyle>
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            
-            <Pie
-              data={chartData}
-              cx="50%"
-              cy="50%"
-              innerRadius={65}
-              outerRadius={100}
-              paddingAngle={0}
-              dataKey="value"
-              labelLine={false}
-              label={({ cx, cy }) => renderCustomizedLabel({ cx, cy, type, data })}
-              cornerRadius={30}
-              stroke="none"
-              startAngle={65}
-              endAngle={450}
-            >
-              <Cell key="cell-consumed" fill={colors[0]} />
-              <Cell key="cell-remaining" fill="#EADAC8" />
-            </Pie>
-          </PieChart>
-        </ResponsiveContainer>
-      </PieCalorieStyle>
-    </StatsContainer>
+        <PieCalorieStyle>
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+
+              <Pie
+                data={chartData}
+                cx="50%"
+                cy="50%"
+                innerRadius={65}
+                outerRadius={100}
+                paddingAngle={0}
+                dataKey="value"
+                labelLine={false}
+                label={({ cx, cy }) => renderCustomizedLabel({ cx, cy, type, data })}
+                cornerRadius={30}
+                stroke="none"
+                startAngle={65}
+                endAngle={450}
+              >
+                <Cell key="cell-consumed" fill={colors[0]} />
+                <Cell key="cell-remaining" fill="#EADAC8" />
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+        </PieCalorieStyle>
+      </StatsContainer>
     );
   } else {
     const macros = [
       { name: "Белки", value: data.proteins.value, max: data.proteins.max },
-      { name: "Жиры", value: data.fats.value, max: data.fats.max },
       { name: "Углеводы", value: data.carbs.value, max: data.carbs.max },
+      { name: "Жиры", value: data.fats.value, max: data.fats.max },
     ];
 
     return (
       <StatsContainer>
         <StatsInfo>
-          {macros.map((macro) => (
-            <MacroItem key={macro.name}>
-              <MacroName>{macro.name}</MacroName>
-              <MacroValue>
-                {macro.value}г/{macro.max}г
-              </MacroValue>
-            </MacroItem>
-          ))}
+          {macros.map((macro, index) => {
+            const color = colors[index]; // Получаем цвет из массива colors по индексу
+            return (
+              <MacroItem key={macro.name}>
+                <MacroName style={{ color }}>{macro.name}</MacroName> {/* Применяем цвет к названию */}
+                <MacroValue> 
+                  {macro.value}г/{macro.max}г
+                </MacroValue>
+              </MacroItem>
+            );
+          })}
         </StatsInfo>
 
         <PieMacrosStyle>
@@ -187,7 +190,7 @@ const NutritionChart = ({ type, data }: ChartProps) => {
                   { name: "Осталось", value: Math.max(0, macro.max - macro.value) },
                 ];
 
-                const outerRadius = 46 + index * 28;
+                const outerRadius = 46 + (2 - index) * 28; // Обратный порядок: 2-0 вместо 0-2
                 const innerRadius = outerRadius - 26;
 
                 return (
@@ -248,21 +251,21 @@ export default function SummaryTab() {
 
   return (
     <>
-        <Title>Ежедневный обзор питания</Title>
-        <ToggleContainer>
-          <ToggleButton
-            active={activeTab === "macros"}
-            onClick={() => setActiveTab("macros")}
-          >
-            БЖУ
-          </ToggleButton>
-          <ToggleButton
-            active={activeTab === "calories"}
-            onClick={() => setActiveTab("calories")}
-          >
-            Калории
-          </ToggleButton>
-        </ToggleContainer>
+      <Title>Ежедневный обзор питания</Title>
+      <ToggleContainer>
+        <ToggleButton
+          active={activeTab === "macros"}
+          onClick={() => setActiveTab("macros")}
+        >
+          БЖУ
+        </ToggleButton>
+        <ToggleButton
+          active={activeTab === "calories"}
+          onClick={() => setActiveTab("calories")}
+        >
+          Калории
+        </ToggleButton>
+      </ToggleContainer>
 
       <Card>
         <NutritionChart type={activeTab} data={nutritionData} />
