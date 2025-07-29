@@ -139,8 +139,8 @@ const NutritionChart = ({ type, data }: ChartProps) => {
               data={chartData}
               cx="50%"
               cy="50%"
-              innerRadius={70}
-              outerRadius={105}
+              innerRadius={65}
+              outerRadius={100}
               paddingAngle={0}
               dataKey="value"
               labelLine={false}
@@ -187,8 +187,8 @@ const NutritionChart = ({ type, data }: ChartProps) => {
                   { name: "Осталось", value: Math.max(0, macro.max - macro.value) },
                 ];
 
-                const outerRadius = 40 + index * 24;
-                const innerRadius = outerRadius - 22;
+                const outerRadius = 46 + index * 28;
+                const innerRadius = outerRadius - 26;
 
                 return (
                   <Pie

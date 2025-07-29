@@ -25,7 +25,6 @@ export const Title = styled.div`
 
 export const ToggleContainer = styled.div`
   display: flex;
-  background: #F2F2F7;
   border-radius: 10px;
   padding: 4px;
   margin: 16px 0;
@@ -33,15 +32,15 @@ export const ToggleContainer = styled.div`
 
 export const ToggleButton = styled.button<{ active: boolean }>`
   flex: 1;
-  background: ${p => p.active ? '#FFFFFF' : 'transparent'};
-  color: ${p => p.active ? '#6C5CE7' : '#8E8E93'};
+  background: ${p => p.active ? '#F2971C' : 'transparent'};
+  color: ${p => p.active ? '#FFFFFF' : '#F2971C'};
   padding: 8px;
-  border: none;
-  border-radius: 8px;
+  border: 1px solid #F2971C;
+  border-radius: 6px;
   font-size: 14px;
-  font-weight: ${p => p.active ? '600' : '500'};
+  margin: 5px;
+  font-weight: ${p => p.active ? '500' : '400'};
   cursor: pointer;
-  box-shadow: ${p => p.active ? '0px 2px 4px rgba(0, 0, 0, 0.1)' : 'none'};
 `;
 
 export const MacrosGrid = styled.div`

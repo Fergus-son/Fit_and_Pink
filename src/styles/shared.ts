@@ -60,3 +60,34 @@ export const NavItem = styled.div<{ active: boolean }>`
     content: "${props => props.active ? '👤' : '👥'}";
   }
 `;
+
+
+
+
+// Добавьте эти стили в конец файла shared.ts (картинка сверху)
+export const AppContainer = styled(Container)`
+  position: relative;
+  overflow: hidden;
+`;
+
+export const BackgroundImage = styled.div<{ imageUrl: string }>`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 40vh;
+  background-image: url(${props => props.imageUrl});
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+`;
+
+export const ContentOverlay = styled(Section)`
+  background: white;
+  border-radius: 20px 20px 0 0;
+  margin-top: 35vh;
+  min-height: 65vh;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+`;
