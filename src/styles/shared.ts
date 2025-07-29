@@ -27,7 +27,6 @@ export const Container = styled.div`
 `;
 
 export const Section = styled.div`
-  padding: 16px;
   flex: 1;
   overflow-y: auto;
   background: #F7F8FA;

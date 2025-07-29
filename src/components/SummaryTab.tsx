@@ -19,20 +19,67 @@ import {
 } from "../styles/summary";
 import { ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { getEffectiveUserId } from "../telegram";
+import { NutritionBarChart } from "./Charts/BarChart/NutritionBarChart";
+
+interface MacroValue {
+  value: number;
+  max: number;
+}
 
 interface NutritionData {
   consumedCalories: number;
   totalCalories: number;
-  proteins: { value: number; max: number };
-  fibers: { value: number; max: number };
-  carbs: { value: number; max: number };
-  fats: { value: number; max: number };
+  proteins: MacroValue;
+  fibers: MacroValue;
+  carbs: MacroValue;
+  fats: MacroValue;
+  history?: {
+    name: string;
+    calories: number;
+    protein: number;
+    fat: number;
+    carbs: number;
+    entries: any[];
+  }[];
 }
 
 interface ChartProps {
   type: "calories" | "macros";
   data: NutritionData;
 }
+
+const renderCaloriesLabel = (cx: number, cy: number, calories: number, totalCalories: number) => (
+  <g>
+    <text
+      x={cx}
+      y={cy - 13}
+      fill="#1C1C1E"
+      fontSize={18}
+      fontWeight={600}
+      textAnchor="middle"
+    >
+      {calories}
+    </text>
+    <text
+      x={cx}
+      y={cy + 5}
+      fill="#323232"
+      fontSize={12}
+      textAnchor="middle"
+    >
+      Калорий
+    </text>
+    <text
+      x={cx}
+      y={cy + 23}
+      fill="#323232"
+      fontSize={10}
+      textAnchor="middle"
+    >
+      из {totalCalories}
+    </text>
+  </g>
+);
 
 const renderCustomizedLabel = ({
   cx,
@@ -45,55 +92,9 @@ const renderCustomizedLabel = ({
   type: "calories" | "macros";
   data: NutritionData;
 }) => {
-  return (
-    <g>
-      {type === "calories" ? (
-        <>
-          <text
-            x={cx}
-            y={cy - 10}
-            fill="#1C1C1E"
-            fontSize={24}
-            fontWeight={700}
-            textAnchor="middle"
-          >
-            {data.consumedCalories}
-          </text>
-          <text
-            x={cx}
-            y={cy + 15}
-            fill="#636366"
-            fontSize={14}
-            textAnchor="middle"
-          >
-            калорий
-          </text>
-        </>
-      ) : (
-        <>
-          <text
-            x={cx}
-            y={cy - 10}
-            fill="#1C1C1E"
-            fontSize={18}
-            fontWeight={600}
-            textAnchor="middle"
-          >
-            БЖУ
-          </text>
-          <text
-            x={cx}
-            y={cy + 15}
-            fill="#636366"
-            fontSize={14}
-            textAnchor="middle"
-          >
-            {data.proteins.value}/{data.fats.value}/{data.carbs.value}г
-          </text>
-        </>
-      )}
-    </g>
-  );
+  return type === "calories"
+    ? renderCaloriesLabel(cx, cy, data.consumedCalories, data.totalCalories)
+    : null;
 };
 
 
@@ -173,7 +174,7 @@ const NutritionChart = ({ type, data }: ChartProps) => {
             return (
               <MacroItem key={macro.name}>
                 <MacroName style={{ color }}>{macro.name}</MacroName> {/* Применяем цвет к названию */}
-                <MacroValue> 
+                <MacroValue>
                   {macro.value}г/{macro.max}г
                 </MacroValue>
               </MacroItem>
@@ -218,6 +219,7 @@ const NutritionChart = ({ type, data }: ChartProps) => {
           </ResponsiveContainer>
         </PieMacrosStyle>
       </StatsContainer>
+
     );
   }
 };
@@ -269,6 +271,10 @@ export default function SummaryTab() {
 
       <Card>
         <NutritionChart type={activeTab} data={nutritionData} />
+      </Card>
+      <Title>История питания</Title>
+      <Card>
+        <NutritionBarChart type={activeTab} data={nutritionData}/>
       </Card>
     </>
   );
