@@ -3,7 +3,6 @@ import { AppContainer, BackgroundImage, ContentOverlay, BottomNav, NavItem } fro
 import SummaryTab from "./components/SummaryTab";
 import ProfileTab from "./components/ProfileTab";
 import { tg, initTelegram, getUserName } from "./telegram";
-import DateSelector from "./components/DateSelector/DateSelector";
 import SummaryPage from './images/SummaryTabPage.jpg';
 import { Greeting } from "./components/Greeting/Greeting";
 
@@ -22,7 +21,6 @@ export default function App() {
       <BackgroundImage imageUrl={SummaryPage} />
       <ContentOverlay>
         <Greeting username={username} />
-        {/* <DateSelector /> */}
         {pageTab === "summary" && <SummaryTab />}
         {pageTab === "profile" && <ProfileTab />}
       </ContentOverlay>
