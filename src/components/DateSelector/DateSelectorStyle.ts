@@ -25,7 +25,7 @@ export const DateItem = styled.div<DateItemProps>`
   min-width: ${({ $isActive }) => ($isActive ? '40px' : '30px')};
   padding: 14px 12px;
   background: ${({ $isActive }) => ($isActive ? '#F2971C' : '#EADAC8')};
-  border-radius: 25px / 10px;  
+  border-radius: 10px;  
   text-align: center;
   color: ${({ $isActive }) => ($isActive ? '#FFFFFF' : '#1C1C1E')};
   box-shadow: 0px 2px 4px rgba(11, 10, 14, 0.32);

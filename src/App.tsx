@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import { Container, Section, BottomNav, NavItem } from "./styles/shared";
+import { AppContainer, BackgroundImage, ContentOverlay, BottomNav, NavItem } from "./styles/shared";
 import SummaryTab from "./components/SummaryTab";
 import ProfileTab from "./components/ProfileTab";
 import { tg, initTelegram, getUserName } from "./telegram";
 import DateSelector from "./components/DateSelector/DateSelector";
+import SummaryPage from './images/SummaryTabPage.jpg';
+import { Greeting } from "./components/Greeting/Greeting";
 
 export default function App() {
   const [pageTab, setPageTab] = useState("summary");
@@ -11,17 +13,19 @@ export default function App() {
 
   useEffect(() => {
     initTelegram();
-    setUsername(getUserName());
+    const name = getUserName();
+    setUsername(name); 
   }, []);
 
   return (
-    <Container>
-      <Section>
+    <AppContainer>
+      <BackgroundImage imageUrl={SummaryPage} />
+      <ContentOverlay>
+        <Greeting username={username} />
         <DateSelector />
-
         {pageTab === "summary" && <SummaryTab />}
         {pageTab === "profile" && <ProfileTab />}
-      </Section>
+      </ContentOverlay>
 
       <BottomNav>
         <NavItem active={pageTab === "summary"} onClick={() => setPageTab("summary")}>
@@ -31,6 +35,6 @@ export default function App() {
           Профиль
         </NavItem>
       </BottomNav>
-    </Container>
+    </AppContainer>
   );
 }

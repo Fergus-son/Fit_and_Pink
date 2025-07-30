@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Section } from "./styles/shared";
+import { BackgroundImage, Container, ContentOverlay, Section } from "./styles/shared";
 import ProfileTab from "./components/ProfileTab";
 import { initTelegram } from "./telegram";
 
@@ -16,7 +16,10 @@ export default function ProfileApp() {
     return (
         <Container>
             <Section>
-                <ProfileTab />
+                <BackgroundImage imageUrl="../images/SummaryTabPage.png" />
+                <ContentOverlay>
+                    <ProfileTab />
+                </ContentOverlay>
             </Section>
         </Container>
     );

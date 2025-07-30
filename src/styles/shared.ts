@@ -21,7 +21,8 @@ export const SkeletonChart = styled(SkeletonLine)`
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: auto;
+  max-height: 100vh; /* Ограничиваем максимальную высоту */
   background: #F7F8FA;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 `;
@@ -33,12 +34,18 @@ export const Section = styled.div`
 `;
 
 export const BottomNav = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  flex-shrink: 0;
   display: flex;
   justify-content: space-around;
   padding: 12px 0;
   background: #FFFFFF;
   box-shadow: 0px -2px 8px rgba(0, 0, 0, 0.05);
   border-top: 1px solid #F2F2F7;
+  z-index: 1;
 `;
 
 export const NavItem = styled.div<{ active: boolean }>`
@@ -67,6 +74,12 @@ export const NavItem = styled.div<{ active: boolean }>`
 export const AppContainer = styled(Container)`
   position: relative;
   overflow: hidden;
+  min-height: 130vh;
+
+  @media (max-height: 700px) {
+    min-height: 160vh;
+  }
+    
 `;
 
 export const BackgroundImage = styled.div<{ imageUrl: string }>`
@@ -78,15 +91,15 @@ export const BackgroundImage = styled.div<{ imageUrl: string }>`
   background-image: url(${props => props.imageUrl});
   background-size: cover;
   background-position: center;
-  z-index: -1;
+  background-attachment: initial;
+  z-index: 0;
 `;
 
 export const ContentOverlay = styled(Section)`
   background: white;
   border-radius: 20px 20px 0 0;
-  margin-top: 35vh;
-  min-height: 65vh;
+  margin-top: 20vh;
+  overflow: hidden; /* Запрещаем скролл */
   position: relative;
   z-index: 1;
-  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
 `;

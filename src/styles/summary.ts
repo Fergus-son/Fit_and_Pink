@@ -9,6 +9,7 @@ export const SecondItem = styled.div`
 `
 
 export const Card = styled.div`
+  margin: 10px;
   background: #EADAC8;
   border-radius: 16px;
   padding: 8px;

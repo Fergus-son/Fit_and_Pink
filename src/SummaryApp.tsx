@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Section } from "./styles/shared";
+import { BackgroundImage, Container, ContentOverlay, Section } from "./styles/shared";
 import SummaryTab from "./components/SummaryTab";
 import { initTelegram } from "./telegram";
 import DateSelector from "./components/DateSelector/DateSelector";
@@ -17,8 +17,11 @@ export default function SummaryApp() {
     return (
         <Container>
             <Section>
-                <DateSelector />
-                <SummaryTab />
+                <BackgroundImage imageUrl="./images/SummaryTabPage.png" />
+                <ContentOverlay>
+                    <DateSelector />
+                    <SummaryTab />
+                </ContentOverlay>
             </Section>
         </Container>
     );

@@ -17,7 +17,6 @@ import {
   SkeletonAvatar,
 } from "../styles/profile";
 import { getEffectiveUserId } from "../telegram";
-import { SkeletonLine } from "../styles/shared";
 
 interface UserData {
   firstName: string;
@@ -108,25 +107,6 @@ const ProfileTab: React.FC = () => {
       [field]: value,
     });
   };
-
-  if (isLoading) {
-    return (
-      <>
-        <ProfileHeader>
-          <SkeletonAvatar />
-          <div style={{ width: "100%", textAlign: "center" }}>
-            <SkeletonLine width="60%" height="1.5rem" style={{ margin: "0 auto 8px" }} />
-            <SkeletonLine width="40%" height="1rem" style={{ margin: "0 auto" }} />
-          </div>
-        </ProfileHeader>
-        {[...Array(7)].map((_, i) => (
-          <div key={i} style={{ marginBottom: "16px" }}>
-            <SkeletonLine width="100%" height="1rem" />
-          </div>
-        ))}
-      </>
-    );
-  }
 
   if (!userData) {
     return <div>Ошибка загрузки данных профиля</div>;
