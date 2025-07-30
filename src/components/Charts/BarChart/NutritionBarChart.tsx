@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import {
   BarChart,
   Bar,
@@ -6,9 +5,9 @@ import {
   YAxis,
   Tooltip,
   Legend,
-  ResponsiveContainer
+  ResponsiveContainer,
+  CartesianGrid
 } from 'recharts';
-import { getEffectiveUserId } from '../../../telegram';
 
 interface ChartProps {
   type: "calories" | "macros";
@@ -42,48 +41,55 @@ interface NutritionData {
 export const NutritionBarChart = ({ type, data }: ChartProps) => {
   return (
     <>
-        <ResponsiveContainer width="100%" height={200}>
-          {/* barCategoryGap="15%" // Настройка расстояния между столбцами (15% от ширины столбца) */}
-          <BarChart data={data.history}>
-            <XAxis dataKey="name" />
-            <YAxis hide />
-            <Tooltip />
-            <Legend />
-            {type === "calories" ? (
+      <ResponsiveContainer width="100%" height={200}>
+        {/* barCategoryGap="15%" // Настройка расстояния между столбцами (15% от ширины столбца) */}
+        <BarChart data={data.history} margin={{ top: 20, right: 10, left: 10, bottom: 0 }}>
+          <CartesianGrid
+            stroke="#323232"
+            strokeDasharray="5 3"  // Более длинный пунктир (5px dash, 3px gap)
+            horizontal={true}
+            vertical={false}
+            strokeWidth={0.5}      // Более тонкие линии
+          />
+          <XAxis dataKey="name" />
+          <YAxis hide />
+          <Tooltip />
+          <Legend />
+          {type === "calories" ? (
+            <Bar
+              dataKey="calories"
+              name="Калории"
+              fill="#708C5F"
+              radius={[4, 4, 0, 0]}
+            // onClick={handleBarClick}
+            />
+          ) : (
+            <>
               <Bar
-                dataKey="calories"
-                name="Калории"
+                dataKey="protein"
+                name="Белки"
                 fill="#708C5F"
                 radius={[4, 4, 0, 0]}
-                // onClick={handleBarClick}
+              // onClick={handleBarClick}
               />
-            ) : (
-              <>
-                <Bar
-                  dataKey="protein"
-                  name="Белки"
-                  fill="#708C5F"
-                  radius={[4, 4, 0, 0]}
-                  // onClick={handleBarClick}
-                />
-                  <Bar
-                    dataKey="carbs"
-                    name="Углеводы"
-                    fill="#F2971C"
-                    radius={[4, 4, 0, 0]}
-                    // onClick={handleBarClick}
-                  />
-                <Bar
-                  dataKey="fat"
-                  name="Жиры"
-                  fill="#6B5E8E"
-                  radius={[4, 4, 0, 0]}
-                  // onClick={handleBarClick}
-                />
-              </>
-            )}
-          </BarChart>
-        </ResponsiveContainer>
+              <Bar
+                dataKey="carbs"
+                name="Углеводы"
+                fill="#F2971C"
+                radius={[4, 4, 0, 0]}
+              // onClick={handleBarClick}
+              />
+              <Bar
+                dataKey="fat"
+                name="Жиры"
+                fill="#6B5E8E"
+                radius={[4, 4, 0, 0]}
+              // onClick={handleBarClick}
+              />
+            </>
+          )}
+        </BarChart>
+      </ResponsiveContainer>
     </>
   );
 };
