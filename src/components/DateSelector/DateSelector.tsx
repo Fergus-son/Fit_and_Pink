@@ -1,27 +1,26 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { DateContainer, DateItem } from "./DateSelectorStyle";
 
-const DateSelector: React.FC = () => {
-  const today = new Date();
-  const currentDay = today.getDate();
-  const currentMonth = today.toLocaleString("default", { month: "short" }).toUpperCase();
-  const currentWeekday = today.toLocaleString("default", { weekday: "short" }).toUpperCase();
+interface DateSelectorProps {
+  onDateSelect: (date: Date) => void;
+}
 
-  // Ссылку создаем для активной даты
+const DateSelector: React.FC<DateSelectorProps> = ({ onDateSelect }) => {
+  const today = new Date();
+  const [selectedDate, setSelectedDate] = useState<Date>(today);
   const activeDateRef = useRef<HTMLDivElement | null>(null);
 
   const dates = Array.from({ length: 7 }, (_, i) => {
     const date = new Date();
-    date.setDate(currentDay - 3 + i);
+    date.setDate(today.getDate() - 3 + i);
     return {
+      date,
       day: date.getDate(),
       weekday: date.toLocaleString("default", { weekday: "short" }).toUpperCase(),
       month: date.toLocaleString("default", { month: "short" }).toUpperCase(),
-      isToday: date.getDate() === currentDay,
     };
   });
 
-  // Прокрутка к сегодняшней дате по центру при загрузке
   useEffect(() => {
     if (activeDateRef.current) {
       activeDateRef.current.scrollIntoView({
@@ -32,19 +31,36 @@ const DateSelector: React.FC = () => {
     }
   }, []);
 
+  const handleDateClick = (date: Date) => {
+    setSelectedDate(date);
+    onDateSelect(date);
+  };
+
+  const isSameDay = (date1: Date, date2: Date) => {
+    return (
+      date1.getDate() === date2.getDate() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getFullYear() === date2.getFullYear()
+    );
+  };
+
   return (
     <DateContainer>
-      {dates.map((date, i) => (
-        <DateItem
-          key={i}
-          $isActive={date.isToday}
-          ref={date.isToday ? activeDateRef : null}
-        >
-          <div>{date.month}</div>
-          <div>{date.day}</div>
-          <div>{date.weekday}</div>
-        </DateItem>
-      ))}
+      {dates.map((date, i) => {
+        const isActive = isSameDay(date.date, selectedDate);
+        return (
+          <DateItem
+            key={i}
+            $isActive={isActive}
+            ref={isActive ? activeDateRef : null}
+            onClick={() => handleDateClick(date.date)}
+          >
+            <div>{date.month}</div>
+            <div>{date.day}</div>
+            <div>{date.weekday}</div>
+          </DateItem>
+        );
+      })}
     </DateContainer>
   );
 };

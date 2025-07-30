@@ -29,7 +29,7 @@ export const DateContainer = styled.div`
   overflow-x: auto;
   white-space: nowrap;
   margin-bottom: 24px;
-  padding-bottom: 8px;
+  padding: 8px;
   scrollbar-width: none;
   -ms-overflow-style: none;
   width: 100%;
@@ -41,23 +41,27 @@ export const DateContainer = styled.div`
 `;
 
 export const DateItem = styled.div<DateItemProps>`
+  text-align: center;
+  cursor: pointer;
   min-width: ${({ $isActive }) => ($isActive ? sizes.activeWidth : sizes.inactiveWidth)};
-  padding: 14px 12px;
+  padding: ${({ $isActive }) => ($isActive ? '16px 12px' : '12px 10px')};
   background: ${({ $isActive }) => ($isActive ? colors.primary : colors.secondary)};
   border-radius: ${sizes.borderRadius};
-  text-align: center;
   color: ${({ $isActive }) => ($isActive ? colors.primaryText : colors.secondaryText)};
-  box-shadow: ${sizes.shadow} ${colors.shadow};
+  box-shadow: ${({ $isActive }) => 
+    $isActive 
+      ? '0px 4px 12px rgba(242, 151, 28, 0.4)' 
+      : `${sizes.shadow} ${colors.shadow}`
+  };
   cursor: pointer;
-
-  /* Анимация только для активного элемента */
-  ${({ $isActive }) => $isActive && `
-    transition: all 0.2s ease-in-out;
-    
-    &:hover {
-      transform: translateY(-2px);
-    }
-  `}
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  
+  /* Начальное поднятое состояние для активной даты */
+  transform: ${({ $isActive }) => $isActive ? 'translateY(-5px)' : 'translateY(0)'};
+  
+  transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* Месяц (верхний текст) */
   & > div:first-child {

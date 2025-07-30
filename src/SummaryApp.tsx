@@ -19,7 +19,7 @@ export default function SummaryApp() {
             <Section>
                 <BackgroundImage imageUrl="./images/SummaryTabPage.png" />
                 <ContentOverlay>
-                    <DateSelector />
+                    {/* <DateSelector /> */}
                     <SummaryTab />
                 </ContentOverlay>
             </Section>

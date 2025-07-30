@@ -22,7 +22,7 @@ export default function App() {
       <BackgroundImage imageUrl={SummaryPage} />
       <ContentOverlay>
         <Greeting username={username} />
-        <DateSelector />
+        {/* <DateSelector /> */}
         {pageTab === "summary" && <SummaryTab />}
         {pageTab === "profile" && <ProfileTab />}
       </ContentOverlay>

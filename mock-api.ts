@@ -46,6 +46,54 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Генератор случайных данных
+const generateRandomData = (baseValue: number, variation: number = 0.2) => {
+  const variationAmount = baseValue * variation;
+  return baseValue + (Math.random() * variationAmount * 2 - variationAmount);
+};
+
+// Создаем данные для последних 7 дней
+const generateNutritionData = (daysAgo: number = 0): NutritionData => {
+  const baseCalories = 2000;
+  const date = new Date();
+  date.setDate(date.getDate() - daysAgo);
+  
+  return {
+    consumedCalories: Math.round(generateRandomData(baseCalories - daysAgo * 50, 0.15)),
+    totalCalories: Math.round(baseCalories - daysAgo * 35),
+    proteins: { 
+      value: Math.round(generateRandomData(140 - daysAgo * 2, 0.1)),
+      max: 150 
+    },
+    fibers: { 
+      value: Math.round(generateRandomData(25 - daysAgo * 0.5, 0.15)),
+      max: 30 
+    },
+    carbs: { 
+      value: Math.round(generateRandomData(150 - daysAgo * 3, 0.2)),
+      max: 200 
+    },
+    fats: { 
+      value: Math.round(generateRandomData(50 - daysAgo * 1, 0.15)),
+      max: 65 
+    },
+    history: Array.from({ length: 7 }, (_, i) => {
+      const dayDate = new Date(date);
+      dayDate.setDate(dayDate.getDate() - (6 - i));
+      
+      return {
+        name: dayDate.toLocaleDateString('ru-RU', { weekday: 'short' }),
+        calories: Math.round(generateRandomData((baseCalories - daysAgo * 50) * 0.9, 0.3)),
+        protein: Math.round(generateRandomData(20 - daysAgo * 0.3, 0.4)),
+        fat: Math.round(generateRandomData(15 - daysAgo * 0.2, 0.5)),
+        carbs: Math.round(generateRandomData(30 - daysAgo * 0.5, 0.6)),
+        entries: []
+      };
+    })
+  };
+};
+
+// Используем let вместо const для userData
 let userData: UserData = {
   firstName: "Иван",
   lastName: "Иванов",
@@ -59,92 +107,45 @@ let userData: UserData = {
   height: 180,
 };
 
-let nutritionData: NutritionData = {
-  consumedCalories: 1900,
-  totalCalories: 2000,
-  proteins: { value: 148, max: 150 },
-  fibers: { value: 25, max: 30 },
-  carbs: { value: 150, max: 200 },
-  fats: { value: 49, max: 65 },
-  history: [
-    {
-      name: "Пн",
-      calories: 2800,
-      protein: 120,
-      fat: 20,
-      carbs: 100,
-      entries: []
-    },
-    {
-      name: "Вт",
-      calories: 3000,
-      protein: 60,
-      fat: 70,
-      carbs: 110,
-      entries: []
-    },
-    {
-      name: "Ср",
-      calories: 2400,
-      protein: 40,
-      fat: 100,
-      carbs: 10,
-      entries: []
-    },
-    {
-      name: "Чт",
-      calories: 2000,
-      protein: 60,
-      fat: 10,
-      carbs: 400,
-      entries: []
-    },
-    {
-      name: "Пт",
-      calories: 900,
-      protein: 40,
-      fat: 90,
-      carbs: 200,
-      entries: []
-    },
-    {
-      name: "Сб",
-      calories: 1500,
-      protein: 120,
-      fat: 50,
-      carbs: 150,
-      entries: []
-    },
-    {
-      name: "Вс",
-      calories: 1000,
-      protein: 10,
-      fat: 50,
-      carbs: 60,
-      entries: []
-    },
+const nutritionDataCache: Record<string, NutritionData> = {};
 
-  ]
+const getNutritionData = (dateStr: string): NutritionData => {
+  if (!nutritionDataCache[dateStr]) {
+    const date = new Date(dateStr);
+    const today = new Date();
+    const diffDays = Math.ceil(Math.abs(today.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+    nutritionDataCache[dateStr] = generateNutritionData(Math.min(diffDays, 30));
+  }
+  return nutritionDataCache[dateStr];
 };
 
 app.get('/api/nutrition', (req, res) => {
   const userId = req.query.userId;
-  if (!userId) return res.status(400).json({ error: "User ID required" });
+  const date = req.query.date as string;
+  
+  if (!userId) {
+    return res.status(400).json({ error: "User ID required" });
+  }
 
-  res.json(nutritionData);
+  try {
+    const targetDate = date || new Date().toISOString().split('T')[0];
+    res.json(getNutritionData(targetDate));
+  } catch (error) {
+    console.error("Error fetching nutrition data:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
-// Роуты
 app.get('/api/user', (req, res) => {
   res.json(userData);
 });
 
 app.post('/api/user/update', (req, res) => {
+  // Теперь можно изменять userData, так как это let
   userData = { ...userData, ...req.body };
   res.json({ success: true });
 });
 
-// Запуск сервера
 app.listen(port, () => {
   console.log(`Mock API server running at http://localhost:${port}`);
 });

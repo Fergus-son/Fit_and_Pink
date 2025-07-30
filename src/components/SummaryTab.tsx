@@ -20,6 +20,7 @@ import {
 import { ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { getEffectiveUserId } from "../telegram";
 import { NutritionBarChart } from "./Charts/BarChart/NutritionBarChart";
+import DateSelector from "./DateSelector/DateSelector";
 
 interface MacroValue {
   value: number;
@@ -228,13 +229,18 @@ export default function SummaryTab() {
   const [activeTab, setActiveTab] = useState<"calories" | "macros">("calories");
   const [nutritionData, setNutritionData] = useState<NutritionData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   useEffect(() => {
     const fetchNutritionData = async () => {
       const userId = getEffectiveUserId();
       try {
         setIsLoading(true);
-        const response = await fetch(`/api/nutrition?userId=${userId}`);
+
+        // Форматируем дату в YYYY-MM-DD
+        const dateStr = selectedDate.toISOString().split('T')[0];
+
+        const response = await fetch(`/api/nutrition?userId=${userId}&date=${dateStr}`);
         const data = await response.json();
         setNutritionData(data);
       } catch (error) {
@@ -245,7 +251,11 @@ export default function SummaryTab() {
     };
 
     fetchNutritionData();
-  }, []);
+  }, [selectedDate]); // Зависимость от selectedDate
+
+  const handleDateSelect = (date: Date) => {
+    setSelectedDate(date);
+  };
 
   if (!nutritionData) {
     return <Card>Ошибка загрузки данных</Card>;
@@ -253,6 +263,7 @@ export default function SummaryTab() {
 
   return (
     <>
+      <DateSelector onDateSelect={handleDateSelect} />
       <Title>Ежедневный обзор питания</Title>
       <ToggleContainer>
         <ToggleButton
@@ -274,7 +285,7 @@ export default function SummaryTab() {
       </Card>
       <Title>История питания</Title>
       <Card>
-        <NutritionBarChart type={activeTab} data={nutritionData}/>
+        <NutritionBarChart type={activeTab} data={nutritionData} />
       </Card>
     </>
   );
