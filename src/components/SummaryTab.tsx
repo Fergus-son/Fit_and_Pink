@@ -4,7 +4,6 @@ import {
   Title,
   ToggleContainer,
   ToggleButton,
-  MacroValue,
 } from "../styles/summary";
 import { getEffectiveUserId } from "../telegram";
 import { NutritionBarChart } from "./Charts/BarChart/NutritionBarChart";
@@ -35,27 +34,25 @@ interface NutritionData {
 
 export default function SummaryTab() {
   const [activeTab, setActiveTab] = useState<"calories" | "macros">("calories");
-  const [nutritionData, setNutritionData] = useState<NutritionData | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [nutritionData, setNutritionData] = useState<NutritionData | null>(null);
+  const [loadingChart, setLoadingChart] = useState(false);
 
   useEffect(() => {
     const fetchNutritionData = async () => {
       const userId = getEffectiveUserId();
       try {
-
-        // Форматируем дату в YYYY-MM-DD
         const dateStr = selectedDate.toISOString().split('T')[0];
-
         const response = await fetch(`/api/nutrition?userId=${userId}&date=${dateStr}`);
         const data = await response.json();
         setNutritionData(data);
       } catch (error) {
         console.error("Failed to fetch nutrition data:", error);
-      } 
+      }
     };
 
     fetchNutritionData();
-  }, [selectedDate]); // Зависимость от selectedDate
+  }, [selectedDate]);
 
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date);
@@ -85,8 +82,13 @@ export default function SummaryTab() {
       </ToggleContainer>
 
       <Card>
-        <NutritionChart type={activeTab} data={nutritionData} />
+        {loadingChart ? (
+          <div style={{ height: 200, textAlign: "center", padding: 16 }}></div>
+        ) : (
+          <NutritionChart type={activeTab} data={nutritionData} />
+        )}
       </Card>
+
       <Title>История питания</Title>
       <Card>
         <NutritionBarChart type={activeTab} data={nutritionData} />

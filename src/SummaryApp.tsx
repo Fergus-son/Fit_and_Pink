@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BackgroundImage, Container, ContentOverlay, Section } from "./styles/shared";
 import SummaryTab from "./components/SummaryTab";
 import { getUserName, initTelegram } from "./telegram";
-import SummaryPage from './images/SummaryTabPage.jpg';
+import SummaryImage from './images/SummaryTabPage.jpg';
 import { Greeting } from "./components/Greeting/Greeting";
 
 
@@ -22,7 +22,7 @@ export default function SummaryApp() {
     return (
         <Container>
             <Section>
-                <BackgroundImage imageUrl={SummaryPage} />
+                <BackgroundImage imageUrl={SummaryImage} />
                 <ContentOverlay>
                     <Greeting username={username} />
                     <SummaryTab />

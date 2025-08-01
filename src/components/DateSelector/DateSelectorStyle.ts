@@ -61,7 +61,7 @@ export const DateItem = styled.div<DateItemProps>`
   /* Начальное поднятое состояние для активной даты */
   transform: ${({ $isActive }) => $isActive ? 'translateY(-5px)' : 'translateY(0)'};
   
-  transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* Месяц (верхний текст) */
   & > div:first-child {

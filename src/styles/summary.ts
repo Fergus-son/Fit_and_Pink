@@ -34,9 +34,9 @@ export const ToggleContainer = styled.div`
 export const ToggleButton = styled.button<{ active: boolean }>`
   flex: 1;
   background: ${p => p.active ? '#F2971C' : 'transparent'};
-  color: ${p => p.active ? '#FFFFFF' : '#F2971C'};
+  color: ${p => p.active ? '#FFFFFF' : 'black'};
   padding: 8px;
-  border: 1px solid #F2971C;
+  border: ${p => p.active ? '1px solid #F2971C;' : '1px solid black'};
   border-radius: 6px;
   font-size: 14px;
   margin: 5px;

@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react";
 import { BackgroundImage, Container, ContentOverlay, Section } from "./styles/shared";
+import ProfileImage from './images/SummaryTabPage.jpg';
+import { getUserName, initTelegram } from "./telegram";
 import ProfileTab from "./components/ProfileTab";
-import { initTelegram } from "./telegram";
+import { Greeting } from "./components/Greeting/Greeting";
 
 export default function ProfileApp() {
     const [initialized, setInitialized] = useState(false);
+    const [username, setUsername] = useState("");
 
     useEffect(() => {
         initTelegram();
         setInitialized(true);
+        const name = getUserName();
+        setUsername(name); 
     }, []);
 
     if (!initialized) return null;
@@ -18,6 +23,7 @@ export default function ProfileApp() {
             <Section>
                 <BackgroundImage imageUrl="../images/SummaryTabPage.png" />
                 <ContentOverlay>
+                    <Greeting username={username} />
                     <ProfileTab />
                 </ContentOverlay>
             </Section>

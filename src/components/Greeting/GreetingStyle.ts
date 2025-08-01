@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const GreetingContainer = styled.div`
-  padding: 30px 16px 30px;
+  padding: 20px 16px 20px;
 `;
 
 export const GreetingText = styled.h1`

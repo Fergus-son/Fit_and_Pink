@@ -29,11 +29,18 @@ const DateSelector: React.FC<DateSelectorProps> = ({ onDateSelect }) => {
         block: "nearest",
       });
     }
-  }, []);
+  }, [selectedDate]);
 
   const handleDateClick = (date: Date) => {
     setSelectedDate(date);
-    onDateSelect(date);
+    
+    // Конвертируем в UTC дату без времени для сервера
+    const utcDate = new Date(Date.UTC(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    ));
+    onDateSelect(utcDate);
   };
 
   const isSameDay = (date1: Date, date2: Date) => {

@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  ProfileHeader,
-  Avatar,
-  ProfileName,
   ProfileSub,
   InfoCard,
   InfoRow,
@@ -13,8 +10,10 @@ import {
   NormValue,
   PrimaryButton,
   SecondaryButton,
-  FooterText,
-  SkeletonAvatar,
+  GradientBlock,
+  GradientBlockTitle,
+  SubscriptionButton,
+  ProfileHeader,
 } from "../styles/profile";
 import { getEffectiveUserId } from "../telegram";
 
@@ -29,7 +28,7 @@ interface UserData {
   currentWeight: number;
   desiredWeight: number;
   height: number;
-  dailyNorm?: number;
+  totalCalories: number;
 }
 
 const ProfileTab: React.FC = () => {
@@ -115,21 +114,21 @@ const ProfileTab: React.FC = () => {
   return (
     <>
       <ProfileHeader>
-        <Avatar>
+        {/* <Avatar>
           {userData.firstName?.[0]}
           {userData.lastName?.[0]}
-        </Avatar>
-        <ProfileName>
-          {userData.firstName} {userData.lastName}
-        </ProfileName>
+        </Avatar> */}
         <ProfileSub>
           Твоя подписка до {formatDate(userData.subscriptionExpiry)}
         </ProfileSub>
+        <SubscriptionButton>Управление подпиской</SubscriptionButton>
       </ProfileHeader>
 
+    <GradientBlock>
+      <GradientBlockTitle>Немного о тебе</GradientBlockTitle>
       <InfoCard>
         <InfoRow>
-          <InfoLabel>🎂 Дата рождения</InfoLabel>
+          <InfoLabel>Дата рождения</InfoLabel>
           {isEditing ? (
             <input
               type="date"
@@ -147,7 +146,7 @@ const ProfileTab: React.FC = () => {
         </InfoRow>
 
         <InfoRow>
-          <InfoLabel>⚧️ Пол</InfoLabel>
+          <InfoLabel>Пол</InfoLabel>
           {isEditing ? (
             <select
               value={editedData?.gender || ""}
@@ -167,7 +166,7 @@ const ProfileTab: React.FC = () => {
         </InfoRow>
 
         <InfoRow>
-          <InfoLabel>🎯 Цель</InfoLabel>
+          <InfoLabel>Цель</InfoLabel>
           {isEditing ? (
             <select
               value={editedData?.goal || ""}
@@ -188,7 +187,7 @@ const ProfileTab: React.FC = () => {
         </InfoRow>
 
         <InfoRow>
-          <InfoLabel>🏃‍♂️ Уровень активности</InfoLabel>
+          <InfoLabel>Уровень активности</InfoLabel>
           {isEditing ? (
             <select
               value={editedData?.activityLevel || ""}
@@ -213,7 +212,7 @@ const ProfileTab: React.FC = () => {
         </InfoRow>
 
         <InfoRow>
-          <InfoLabel>⚖️ Текущий вес</InfoLabel>
+          <InfoLabel>Текущий вес</InfoLabel>
           {isEditing ? (
             <input
               type="number"
@@ -226,7 +225,7 @@ const ProfileTab: React.FC = () => {
                 borderRadius: "8px",
                 padding: "4px 8px",
                 width: "80px",
-                textAlign: "right",
+                textAlign: "left",
               }}
             />
           ) : (
@@ -235,7 +234,7 @@ const ProfileTab: React.FC = () => {
         </InfoRow>
 
         <InfoRow>
-          <InfoLabel>🥇 Желаемый вес</InfoLabel>
+          <InfoLabel>Желаемый вес</InfoLabel>
           {isEditing ? (
             <input
               type="number"
@@ -248,7 +247,7 @@ const ProfileTab: React.FC = () => {
                 borderRadius: "8px",
                 padding: "4px 8px",
                 width: "80px",
-                textAlign: "right",
+                textAlign: "left",
               }}
             />
           ) : (
@@ -257,7 +256,7 @@ const ProfileTab: React.FC = () => {
         </InfoRow>
 
         <InfoRow>
-          <InfoLabel>📏 Рост</InfoLabel>
+          <InfoLabel>Рост</InfoLabel>
           {isEditing ? (
             <input
               type="number"
@@ -268,7 +267,7 @@ const ProfileTab: React.FC = () => {
                 borderRadius: "8px",
                 padding: "4px 8px",
                 width: "80px",
-                textAlign: "right",
+                textAlign: "left",
               }}
             />
           ) : (
@@ -276,10 +275,11 @@ const ProfileTab: React.FC = () => {
           )}
         </InfoRow>
       </InfoCard>
+    </GradientBlock>
 
       <NormCard>
         <NormLabel>Твоя дневная норма</NormLabel>
-        <NormValue>{userData.dailyNorm || 2000} ккал</NormValue>
+        <NormValue>{userData.totalCalories} ккал</NormValue>
       </NormCard>
 
       {isEditing ? (
@@ -300,7 +300,6 @@ const ProfileTab: React.FC = () => {
         </>
       )}
 
-      <FooterText>Powered by Fit&Pink</FooterText>
     </>
   );
 };

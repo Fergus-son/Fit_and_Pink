@@ -96,6 +96,10 @@ export const BackgroundImage = styled.div<{ imageUrl: string }>`
 `;
 
 export const ContentOverlay = styled(Section)`
+  width: 100%;
+  margin: 0;
+  padding: 16px;
+  box-sizing: border-box; /* Важно! */
   background: white;
   border-radius: 20px 20px 0 0;
   margin-top: 20vh;
