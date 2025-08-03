@@ -77,19 +77,29 @@ const generateNutritionData = (daysAgo: number = 0): NutritionData => {
       value: Math.round(generateRandomData(50 - daysAgo * 1, 0.15)),
       max: 65 
     },
-    history: Array.from({ length: 7 }, (_, i) => {
-      const dayDate = new Date(date);
-      dayDate.setDate(dayDate.getDate() - (6 - i));
-      
-      return {
-        name: dayDate.toLocaleDateString('ru-RU', { weekday: 'short' }),
-        calories: Math.round(generateRandomData((baseCalories - daysAgo * 50) * 0.9, 0.3)),
-        protein: Math.round(generateRandomData(20 - daysAgo * 0.3, 0.4)),
-        fat: Math.round(generateRandomData(15 - daysAgo * 0.2, 0.5)),
-        carbs: Math.round(generateRandomData(30 - daysAgo * 0.5, 0.6)),
-        entries: []
-      };
-    })
+history: Array.from({ length: 7 }, (_, i) => {
+  const dayDate = new Date(date);
+  dayDate.setDate(dayDate.getDate() - (6 - i));
+  
+  return {
+    name: `Прием пищи ${i + 1}`,
+    calories: Math.round(generateRandomData((baseCalories - daysAgo * 50) * 0.9, 0.3)),
+    protein: Math.round(generateRandomData(20 - daysAgo * 0.3, 0.4)),
+    fat: Math.round(generateRandomData(15 - daysAgo * 0.2, 0.5)),
+    carbs: Math.round(generateRandomData(30 - daysAgo * 0.5, 0.6)),
+    entries: [{
+      timestamp: dayDate.toISOString(),
+      name: `Блюдо ${i + 1}`,
+      calories: Math.round(generateRandomData(300, 0.3)),
+      protein: Math.round(generateRandomData(10, 0.4)),
+      fat: Math.round(generateRandomData(5, 0.5)),
+      carbs: Math.round(generateRandomData(20, 0.6)),
+      fiber: Math.round(generateRandomData(3, 0.5)),
+      weight: Math.round(generateRandomData(150, 0.2)),
+      meal_type: ["breakfast", "lunch", "dinner", "snack"][i % 4]
+    }]
+  };
+})
   };
 };
 

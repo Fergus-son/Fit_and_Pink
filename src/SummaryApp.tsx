@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
-import { BackgroundImage, Container, ContentOverlay, Section } from "./styles/shared";
+import { Container, Section, ContentOverlay, BackgroundImage, BottomNav, NavItem } from "./styles/shared";
 import SummaryTab from "./components/SummaryTab";
 import { getUserName, initTelegram } from "./telegram";
-import SummaryImage from './images/SummaryTabPage.jpg';
+import SummaryBackground from './images/SummaryTabPage.jpg';
 import { Greeting } from "./components/Greeting/Greeting";
-
+import HistoryPage from "./components/HistoryTab";
 
 export default function SummaryApp() {
     const [initialized, setInitialized] = useState(false);
     const [username, setUsername] = useState("");
+    const [activePage, setActivePage] = useState<"summary" | "history">("summary");
 
     useEffect(() => {
         initTelegram();
         setInitialized(true);
-        const name = getUserName();
-        setUsername(name); 
+        setUsername(getUserName());
     }, []);
 
     if (!initialized) return null;
@@ -22,10 +22,28 @@ export default function SummaryApp() {
     return (
         <Container>
             <Section>
-                <BackgroundImage imageUrl={SummaryImage} />
+                <BackgroundImage 
+                    imageUrl={SummaryBackground} 
+                />
                 <ContentOverlay>
                     <Greeting username={username} />
-                    <SummaryTab />
+                    
+                    {activePage === "summary" ? <SummaryTab /> : <HistoryPage />}
+                    
+                    <BottomNav>
+                        <NavItem
+                            active={activePage === "summary"}
+                            onClick={() => setActivePage("summary")}
+                        >
+                            Статистика
+                        </NavItem>
+                        <NavItem
+                            active={activePage === "history"}
+                            onClick={() => setActivePage("history")}
+                        >
+                            История
+                        </NavItem>
+                    </BottomNav>
                 </ContentOverlay>
             </Section>
         </Container>

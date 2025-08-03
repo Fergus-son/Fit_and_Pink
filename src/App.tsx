@@ -5,6 +5,7 @@ import ProfileTab from "./components/ProfileTab";
 import { tg, initTelegram, getUserName } from "./telegram";
 import SummaryPage from './images/SummaryTabPage.jpg';
 import { Greeting } from "./components/Greeting/Greeting";
+import HistoryTab from "./components/HistoryTab";
 
 export default function App() {
   const [pageTab, setPageTab] = useState("summary");
@@ -23,6 +24,7 @@ export default function App() {
         <Greeting username={username} />
         {pageTab === "summary" && <SummaryTab />}
         {pageTab === "profile" && <ProfileTab />}
+        {pageTab === "history" && <HistoryTab />}
       </ContentOverlay>
 
       <BottomNav>
@@ -31,6 +33,9 @@ export default function App() {
         </NavItem>
         <NavItem active={pageTab === "profile"} onClick={() => setPageTab("profile")}>
           Профиль
+        </NavItem>
+        <NavItem active={pageTab === "history"} onClick={() => setPageTab("history")}>
+          История
         </NavItem>
       </BottomNav>
     </AppContainer>

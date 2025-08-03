@@ -8,7 +8,7 @@ import {
   MacroRow,
   Button,
   ModalActions
-} from "../styles/history";
+} from "../styles/historyModal";
 
 export interface FoodEntry {
   timestamp: string;
