@@ -8,7 +8,7 @@ const GlobalStyles = createGlobalStyle`
 
 body, html, #root {
   width: 100%;
-  min-width: 100vw;
+  min-height: 100vw;
   overflow-x: hidden;
 }
 `;

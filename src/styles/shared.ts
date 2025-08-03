@@ -22,7 +22,6 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: auto;
-  max-height: 100vh; /* Ограничиваем максимальную высоту */
   background: #F7F8FA;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 `;
