@@ -85,8 +85,6 @@ export default function HistoryTab() {
 
   return (
     <>
-      <Title>История питания</Title>
-
         <FilterContainer>
           <FilterButton active={timeFilter === "all"} onClick={() => setTimeFilter("all")}>
             Все
@@ -101,10 +99,11 @@ export default function HistoryTab() {
             За 30 дней
           </FilterButton>
         </FilterContainer>
-
         <RoundEditButton onClick={() => console.log("Edit mode activated")}>
           ✏️
         </RoundEditButton>
+        <Title>Если нужно что-то вспомнить или убрать</Title>
+
 
 
       <Card>
@@ -121,11 +120,10 @@ export default function HistoryTab() {
                   <MacroInfo>
                     {item.protein}г белков, {item.fat}г жиров, {item.carbs}г углеводов
                   </MacroInfo>
-                  <MacroInfo>{formatDate(item.timestamp)}</MacroInfo>
+                  <TimeInfo>{formatDate(item.timestamp)}</TimeInfo>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <TimeInfo>{formatTime(item.timestamp)}</TimeInfo>
-                  {/* <RoundEditButton onClick={() => handleEdit(item.id)}>✏️</RoundEditButton> */}
                 </div>
               </HistoryItem>
             ))}

@@ -5,6 +5,7 @@ import { getUserName, initTelegram } from "./telegram";
 import SummaryBackground from './images/SummaryTabPage.jpg';
 import { Greeting } from "./components/Greeting/Greeting";
 import HistoryPage from "./components/HistoryTab";
+import { GreetingHistory } from "./components/Greeting/GreetingHistory";
 
 export default function SummaryApp() {
     const [initialized, setInitialized] = useState(false);
@@ -26,7 +27,7 @@ export default function SummaryApp() {
                     imageUrl={SummaryBackground} 
                 />
                 <ContentOverlay>
-                    {activePage === "summary" ? <Greeting username={username} /> : "Твоё Питание"}
+                    {activePage === "summary" ? <Greeting username={username} /> : <GreetingHistory />}
                     {/* <Greeting username={username} /> */}
                     
                     {activePage === "summary" ? <SummaryTab /> : <HistoryPage />}

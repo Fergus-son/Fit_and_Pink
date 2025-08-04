@@ -1,68 +1,63 @@
 import styled from "styled-components";
 
-export const HeaderText = styled.h1`
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 16px;
-  color: #2D3436;
-`;
-
 export const HistoryContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
+  margin: 15px 0px 15px;
 `;
 
 export const HistoryItem = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid #F2F2F7;
+  padding: 20px;
+  margin: 0px 5px 0px 5px;
+  background-color: white;
+  border-radius: 20px;
+  // border-bottom: 1px solid #F2F2F7;
 `;
 
 
 export const FoodName = styled.span`
-font-weight: 500;
+font-weight: bold;
 font-size: 16px;
 display: block;
-margin-bottom: 4px;
 color: #2D3436;
 `;
 
 export const MacroInfo = styled.span`
-font-size: 14px;
-color: #636E72;
+font-size: 12px;
+color: #2D3436;
 `;
 
 export const TimeInfo = styled.span`
-font-size: 14px;
-color: #B2BEC3;
-margin-left: 16px;
+font-size: 12px;
+color: #2D3436;
+display: block;
 `;
 
 export const FilterContainer = styled.div`
-display: flex;
-gap: 8px;
-overflow-x: auto;
-padding: 8px 0 16px;
-margin: 0 -16px;
-padding-left: 16px;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 0px 8px 8px;
 `;
 
 export const FilterButton = styled.button<{ active?: boolean }>`
-padding: 8px 12px;
-border-radius: 20px;
-font-size: 14px;
-white-space: nowrap;
-border: none;
-background: ${props => props.active ? '#6C5CE7' : '#F5F6FA'};
-color: ${props => props.active ? '#FFFFFF' : '#2D3436'};
-cursor: pointer;
-font-weight: 500;
+  flex: 1;
+  background: ${p => p.active ? '#F2971C' : 'transparent'};
+  color: ${p => p.active ? '#FFFFFF' : 'black'};
+  padding: 6px;
+  border: ${p => p.active ? '1px solid #F2971C;' : '1px solid black'};
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: ${p => p.active ? '500' : '400'};
+  cursor: pointer;
 `;
 
 export const RoundEditButton = styled.button`
+  margin: 0px 8px 8px;
   border: 1px solid #F2F2F7;
   cursor: pointer;
   margin-left: auto;
