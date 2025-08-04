@@ -14,6 +14,7 @@ import {
   GradientBlockTitle,
   SubscriptionButton,
   ProfileHeader,
+  ButtonContainer,
 } from "../styles/profile";
 import { getEffectiveUserId } from "../telegram";
 
@@ -290,14 +291,14 @@ const ProfileTab: React.FC = () => {
           </SecondaryButton>
         </>
       ) : (
-        <>
+        <ButtonContainer>
           <PrimaryButton onClick={handleEditClick}>
             Изменить данные
           </PrimaryButton>
           <SecondaryButton onClick={handleOfferClick}>
             Оферта
           </SecondaryButton>
-        </>
+        </ButtonContainer>
       )}
 
     </>

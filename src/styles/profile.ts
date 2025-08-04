@@ -3,8 +3,9 @@ import styled from "styled-components";
 export const ProfileHeader = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
   margin-bottom: 24px;
+  margin-left: 20px;
 `;
 
 // export const Avatar = styled.div`
@@ -22,9 +23,9 @@ export const ProfileHeader = styled.div`
 
 
 export const ProfileSub = styled.div`
-  font-size: 20px;
-  padding: 10px;
-  font-weight: 400;
+  font-size: 18px;
+  margin-bottom: 20px;
+  font-weight: 500;
   color:rgb(6, 6, 6);
   `;
   
@@ -43,7 +44,8 @@ export const SubscriptionButton = styled.button`
 export const GradientBlock = styled.div`
   background: linear-gradient(180deg, #5F895E 0%, #FFA32E 100%);
   border-radius: 24px 24px;
-  padding: 8px 20px;
+  padding: 8px;
+  margin: 16px;
 `;
 
 export const GradientBlockTitle = styled.div`
@@ -58,7 +60,7 @@ export const GradientBlockTitle = styled.div`
 export const InfoCard = styled.div`
   background:rgba(95, 89, 89, 0.32);
   border-radius: 16px;
-  padding: 16px;
+  padding: 8px;
   margin-bottom: 16px;
   box-shadow: 0px 2px 1px rgba(0, 0, 0, 0.17);
 `;
@@ -93,7 +95,7 @@ export const NormCard = styled.div`
   background: #F2F2F7;
   border-radius: 12px;
   padding: 16px;
-  margin: 16px 0;
+  margin: 16px;
   text-align: center;
 `;
 
@@ -108,6 +110,15 @@ export const NormValue = styled.div`
   color: #1C1C1E;
   margin-top: 4px;
 `;
+
+export const ButtonContainer = styled.div`
+  display: grid;
+  flex-direction: column;
+  border-radius: 10px;
+  padding: 4px;
+  margin: 16px 10px;
+`;
+
 
 export const PrimaryButton = styled.button`
   background: #F2971C;

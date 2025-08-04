@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { 
+import {
   HistoryContainer,
   HistoryItem,
   FoodName,
@@ -7,8 +7,8 @@ import {
   TimeInfo,
   FilterContainer,
   FilterButton,
-  EditButton,
-  EmptyState
+  EmptyState,
+  RoundEditButton,
 } from "../styles/history";
 import { getEffectiveUserId } from "../telegram";
 import { Card, Title } from "../styles/summary";
@@ -38,9 +38,9 @@ export default function HistoryTab() {
       try {
         const response = await fetch(`/api/nutrition/history?userId=${userId}`);
         if (!response.ok) throw new Error('Network response was not ok');
-        
+
         const data: NutritionItem[] = await response.json();
-        
+
         // Фильтрация по времени
         const now = new Date();
         const filteredData = data.filter(item => {
@@ -48,7 +48,7 @@ export default function HistoryTab() {
           const diffTime = now.getTime() - itemDate.getTime();
           const diffDays = diffTime / (1000 * 60 * 60 * 24);
 
-          switch(timeFilter) {
+          switch (timeFilter) {
             case "today": return diffDays <= 1;
             case "week": return diffDays <= 7;
             case "month": return diffDays <= 30;
@@ -63,14 +63,14 @@ export default function HistoryTab() {
         setIsLoading(false);
       }
     };
-    
+
     fetchHistory();
   }, [timeFilter]);
 
   const formatTime = (timestamp: string) => {
-    return new Date(timestamp).toLocaleTimeString('ru-RU', { 
-      hour: '2-digit', 
-      minute: '2-digit' 
+    return new Date(timestamp).toLocaleTimeString('ru-RU', {
+      hour: '2-digit',
+      minute: '2-digit'
     }).replace(':', '');
   };
 
@@ -86,27 +86,32 @@ export default function HistoryTab() {
   return (
     <>
       <Title>История питания</Title>
-      
-      <FilterContainer>
-        <FilterButton active={timeFilter === "all"} onClick={() => setTimeFilter("all")}>
-          Все
-        </FilterButton>
-        <FilterButton active={timeFilter === "today"} onClick={() => setTimeFilter("today")}>
-          Сегодня
-        </FilterButton>
-        <FilterButton active={timeFilter === "week"} onClick={() => setTimeFilter("week")}>
-          За неделю
-        </FilterButton>
-        <FilterButton active={timeFilter === "month"} onClick={() => setTimeFilter("month")}>
-          За 30 дней
-        </FilterButton>
-      </FilterContainer>
-      
+
+        <FilterContainer>
+          <FilterButton active={timeFilter === "all"} onClick={() => setTimeFilter("all")}>
+            Все
+          </FilterButton>
+          <FilterButton active={timeFilter === "today"} onClick={() => setTimeFilter("today")}>
+            Сегодня
+          </FilterButton>
+          <FilterButton active={timeFilter === "week"} onClick={() => setTimeFilter("week")}>
+            За неделю
+          </FilterButton>
+          <FilterButton active={timeFilter === "month"} onClick={() => setTimeFilter("month")}>
+            За 30 дней
+          </FilterButton>
+        </FilterContainer>
+
+        <RoundEditButton onClick={() => console.log("Edit mode activated")}>
+          ✏️
+        </RoundEditButton>
+
+
       <Card>
         {isLoading ? (
           <div>Загрузка...</div>
         ) : history.length === 0 ? (
-          <EmptyState>Если нужно что-то вспомнить или убрать</EmptyState>
+          <EmptyState>Нет записей</EmptyState>
         ) : (
           <HistoryContainer>
             {history.map(item => (
@@ -118,9 +123,9 @@ export default function HistoryTab() {
                   </MacroInfo>
                   <MacroInfo>{formatDate(item.timestamp)}</MacroInfo>
                 </div>
-                <div>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
                   <TimeInfo>{formatTime(item.timestamp)}</TimeInfo>
-                  <EditButton onClick={() => handleEdit(item.id)}>✏️</EditButton>
+                  {/* <RoundEditButton onClick={() => handleEdit(item.id)}>✏️</RoundEditButton> */}
                 </div>
               </HistoryItem>
             ))}

@@ -21,58 +21,65 @@ export const HistoryItem = styled.div`
   border-bottom: 1px solid #F2F2F7;
 `;
 
+
 export const FoodName = styled.span`
-  font-weight: 500;
-  font-size: 16px;
-  display: block;
-  margin-bottom: 4px;
-  color: #2D3436;
+font-weight: 500;
+font-size: 16px;
+display: block;
+margin-bottom: 4px;
+color: #2D3436;
 `;
 
 export const MacroInfo = styled.span`
-  font-size: 14px;
-  color: #636E72;
+font-size: 14px;
+color: #636E72;
 `;
 
 export const TimeInfo = styled.span`
-  font-size: 14px;
-  color: #B2BEC3;
-  margin-left: 16px;
+font-size: 14px;
+color: #B2BEC3;
+margin-left: 16px;
 `;
 
 export const FilterContainer = styled.div`
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding: 8px 0 16px;
-  margin: 0 -16px;
-  padding-left: 16px;
-  border-bottom: 1px solid #F2F2F7;
+display: flex;
+gap: 8px;
+overflow-x: auto;
+padding: 8px 0 16px;
+margin: 0 -16px;
+padding-left: 16px;
 `;
 
 export const FilterButton = styled.button<{ active?: boolean }>`
-  padding: 8px 12px;
-  border-radius: 20px;
-  font-size: 14px;
-  white-space: nowrap;
-  border: none;
-  background: ${props => props.active ? '#6C5CE7' : '#F5F6FA'};
-  color: ${props => props.active ? '#FFFFFF' : '#2D3436'};
-  cursor: pointer;
-  font-weight: 500;
+padding: 8px 12px;
+border-radius: 20px;
+font-size: 14px;
+white-space: nowrap;
+border: none;
+background: ${props => props.active ? '#6C5CE7' : '#F5F6FA'};
+color: ${props => props.active ? '#FFFFFF' : '#2D3436'};
+cursor: pointer;
+font-weight: 500;
 `;
 
-export const EditButton = styled.button`
-  background: none;
-  border: none;
+export const RoundEditButton = styled.button`
+  border: 1px solid #F2F2F7;
   cursor: pointer;
-  margin-left: 8px;
+  margin-left: auto;
   color: #B2BEC3;
-  font-size: 16px;
+  font-size: 25px;
   padding: 4px;
+  width: 50px;
+  height:50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   
   &:hover {
-    color: #6C5CE7;
+    background-color: #F2971C;
+    border-color: black;
   }
 `;
 

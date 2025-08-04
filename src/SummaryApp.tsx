@@ -26,7 +26,8 @@ export default function SummaryApp() {
                     imageUrl={SummaryBackground} 
                 />
                 <ContentOverlay>
-                    <Greeting username={username} />
+                    {activePage === "summary" ? <Greeting username={username} /> : "Твоё Питание"}
+                    {/* <Greeting username={username} /> */}
                     
                     {activePage === "summary" ? <SummaryTab /> : <HistoryPage />}
                     

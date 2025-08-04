@@ -5,7 +5,7 @@ export const GreetingContainer = styled.div`
 `;
 
 export const GreetingText = styled.h1`
-  font-size: 24px;
+  font-size: 30px;
   font-weight: 500;
   margin: 0;
   color: #000;

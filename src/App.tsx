@@ -6,6 +6,7 @@ import { tg, initTelegram, getUserName } from "./telegram";
 import SummaryPage from './images/SummaryTabPage.jpg';
 import { Greeting } from "./components/Greeting/Greeting";
 import HistoryTab from "./components/HistoryTab";
+import { GreetingHistory } from "./components/Greeting/GreetingHistory";
 
 export default function App() {
   const [pageTab, setPageTab] = useState("summary");
@@ -21,7 +22,10 @@ export default function App() {
     <AppContainer>
       <BackgroundImage imageUrl={SummaryPage} />
       <ContentOverlay>
-        <Greeting username={username} />
+        {pageTab === "summary" && <Greeting username={username} />}
+        {pageTab === "profile" && <Greeting username={username} />}
+        {pageTab === "history" && <GreetingHistory />}
+        {/* <Greeting username={username} /> */}
         {pageTab === "summary" && <SummaryTab />}
         {pageTab === "profile" && <ProfileTab />}
         {pageTab === "history" && <HistoryTab />}
