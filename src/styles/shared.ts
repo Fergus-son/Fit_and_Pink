@@ -1,23 +1,5 @@
 import styled from "styled-components";
 
-export const SkeletonLine = styled.div<{ width?: string; height?: string }>`
-  background: #f0f0f0;
-  border-radius: 4px;
-  width: ${props => props.width || '100%'};
-  height: ${props => props.height || '1rem'};
-  animation: pulse 1.5s infinite;
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
-`;
-
-export const SkeletonChart = styled(SkeletonLine)`
-  border-radius: 8px;
-  width: 100%;
-`;
-
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -34,36 +16,32 @@ export const Section = styled.div`
 
 export const BottomNav = styled.div`
   position: fixed;
-  bottom: 0;
-  width: 100%;
-  height: 60px;
-  flex-shrink: 0;
+  bottom: 30px; /* Отступ снизу */
+  left: 50%; /* Центрирование по горизонтали */
+  transform: translateX(-50%); /* Точное центрирование */
+  width: auto; /* Ширина по содержимому */
+  min-width: 200px; /* Минимальная ширина */
+  height: 50px;
   display: flex;
-  justify-content: space-around;
-  padding: 12px 0;
-  background: #FFFFFF;
-  box-shadow: 0px -2px 8px rgba(0, 0, 0, 0.05);
-  border-top: 1px solid #F2F2F7;
+  justify-content: space-evenly;
+  align-items: center;
+  background: rgba(255, 251, 251, 0.43);
   z-index: 1;
+  border-radius: 100px;
+  padding: 0 20px; /* Внутренние отступы */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Легкая тень */
+`;
+
+export const ButtonsContainer = styled.div`
+  justify-content: space-evenly;
+  align-items: center;
 `;
 
 export const NavItem = styled.div<{ active: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: ${props => props.active ? '#6C5CE7' : '#8E8E93'};
-  font-size: 12px;
-  font-weight: ${props => props.active ? '600' : '500'};
   gap: 4px;
-  
-  &::before {
-    content: "${props => props.active ? '📊' : '📈'}";
-    font-size: 24px;
-  }
-  
-  &:last-child::before {
-    content: "${props => props.active ? '👤' : '👥'}";
-  }
 `;
 
 
@@ -94,9 +72,17 @@ export const BackgroundImage = styled.div<{ imageUrl: string }>`
   z-index: 0;
 `;
 
+export const StyledNavIcon = styled.div<{ icon: string }>`
+  width: 25px;
+  height: 25px;
+  background-image: url(${props => props.icon});
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+`;
+
 export const ContentOverlay = styled(Section)`
   width: 100%;
-  margin: 0;
   padding: 16px;
   box-sizing: border-box; /* Важно! */
   background: white;
@@ -104,5 +90,6 @@ export const ContentOverlay = styled(Section)`
   margin-top: 20vh;
   overflow: hidden; /* Запрещаем скролл */
   position: relative;
+  min-height: 110vh;
   z-index: 1;
 `;

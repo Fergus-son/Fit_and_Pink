@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
-import { Container, Section, ContentOverlay, BackgroundImage, BottomNav, NavItem } from "./styles/shared";
+import { Container, Section, ContentOverlay, BackgroundImage, BottomNav, NavItem, StyledNavIcon, ButtonsContainer } from "./styles/shared";
 import SummaryTab from "./components/SummaryTab";
 import { getUserName, initTelegram } from "./telegram";
 import SummaryBackground from './images/SummaryTabPage.jpg';
 import { Greeting } from "./components/Greeting/Greeting";
 import HistoryPage from "./components/HistoryTab";
 import { GreetingHistory } from "./components/Greeting/GreetingHistory";
+import historyActive from "./icons/historyActive.png"
+import historyInactive from "./icons/historyInactive.png"
+import homeActive from "./icons/homeActive.png"
+import homeInactive from "./icons/homeInactive.png"
 
 export default function SummaryApp() {
     const [initialized, setInitialized] = useState(false);
@@ -23,28 +27,31 @@ export default function SummaryApp() {
     return (
         <Container>
             <Section>
-                <BackgroundImage 
-                    imageUrl={SummaryBackground} 
+                <BackgroundImage
+                    imageUrl={SummaryBackground}
                 />
                 <ContentOverlay>
                     {activePage === "summary" ? <Greeting username={username} /> : <GreetingHistory />}
                     {/* <Greeting username={username} /> */}
-                    
+
                     {activePage === "summary" ? <SummaryTab /> : <HistoryPage />}
-                    
+
                     <BottomNav>
-                        <NavItem
-                            active={activePage === "summary"}
-                            onClick={() => setActivePage("summary")}
-                        >
-                            Статистика
-                        </NavItem>
-                        <NavItem
-                            active={activePage === "history"}
-                            onClick={() => setActivePage("history")}
-                        >
-                            История
-                        </NavItem>
+                        <ButtonsContainer>
+                            <NavItem
+                                active={activePage === "summary"}
+                                onClick={() => setActivePage("summary")}
+                            >
+                                <StyledNavIcon icon={activePage === "summary" ? homeActive : homeInactive} />
+                            </NavItem>
+
+                            <NavItem
+                                active={activePage === "history"}
+                                onClick={() => setActivePage("history")}
+                            >
+                                <StyledNavIcon icon={activePage === "history" ? historyActive : historyInactive} />
+                            </NavItem>
+                        </ButtonsContainer>
                     </BottomNav>
                 </ContentOverlay>
             </Section>

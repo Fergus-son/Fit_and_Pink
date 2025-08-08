@@ -1,18 +1,20 @@
 import express from 'express';
 import cors from 'cors';
 
-// Типы данных
+// Типы данных из index.ts
 interface FoodEntry {
   id: string;
-  timestamp: string;
-  name: string;
-  calories: number;
-  protein: number;
-  fat: number;
-  carbs: number;
-  fiber: number;
-  weight: number;
-  meal_type: string;
+  nutrition_data: {
+    timestamp: string;
+    name: string;
+    calories: number;
+    protein: number;
+    fat: number;
+    carbs: number;
+    fiber: number;
+    weight: number;
+    meal_type: string;
+  };
 }
 
 interface DaySummary {
@@ -22,6 +24,7 @@ interface DaySummary {
   fat: number;
   carbs: number;
   fiber: number;
+  entries: FoodEntry[];
 }
 
 interface NutritionData {
@@ -80,15 +83,17 @@ const generateFoodHistory = (days: number = 30): FoodEntry[] => {
 
       const entry: FoodEntry = {
         id: generateId(),
-        timestamp: mealTime.toISOString(),
-        name: meals[Math.floor(Math.random() * meals.length)],
-        calories: Math.round(generateRandomData(400, 0.3)),
-        protein: Math.round(generateRandomData(20, 0.4)),
-        fat: Math.round(generateRandomData(15, 0.5)),
-        carbs: Math.round(generateRandomData(30, 0.6)),
-        fiber: Math.round(generateRandomData(3, 0.5)),
-        weight: Math.round(generateRandomData(200, 0.2)),
-        meal_type: ['breakfast', 'lunch', 'dinner', 'snack'][j % 4]
+        nutrition_data: {
+          timestamp: mealTime.toISOString(),
+          name: meals[Math.floor(Math.random() * meals.length)],
+          calories: Math.round(generateRandomData(400, 0.3)),
+          protein: Math.round(generateRandomData(20, 0.4)),
+          fat: Math.round(generateRandomData(15, 0.5)),
+          carbs: Math.round(generateRandomData(30, 0.6)),
+          fiber: Math.round(generateRandomData(3, 0.5)),
+          weight: Math.round(generateRandomData(200, 0.2)),
+          meal_type: ['breakfast', 'lunch', 'dinner', 'snack'][j % 4]
+        }
       };
 
       history.push(entry);
@@ -103,17 +108,25 @@ const generateNutritionSummary = (daysAgo: number = 0): NutritionData => {
   const date = new Date();
   date.setDate(date.getDate() - daysAgo);
 
+  const foodEntries = generateFoodHistory(7);
+  
   const history: DaySummary[] = Array.from({ length: 7 }, (_, i) => {
     const dayDate = new Date(date);
     dayDate.setDate(dayDate.getDate() - (6 - i));
     
+    const dayEntries = foodEntries.filter(entry => {
+      const entryDate = new Date(entry.nutrition_data.timestamp);
+      return entryDate.toDateString() === dayDate.toDateString();
+    });
+
     return {
       name: dayDate.toLocaleDateString('ru-RU', { weekday: 'short' }),
       calories: Math.round(generateRandomData(1800, 0.2)),
       protein: Math.round(generateRandomData(120, 0.15)),
       fat: Math.round(generateRandomData(50, 0.15)),
       carbs: Math.round(generateRandomData(200, 0.2)),
-      fiber: Math.round(generateRandomData(20, 0.1))
+      fiber: Math.round(generateRandomData(20, 0.1)),
+      entries: dayEntries
     };
   });
 
@@ -139,14 +152,14 @@ app.get('/api/nutrition', (req, res) => {
   }
 });
 
-app.get('/api/nutrition/history', (req, res) => {
-  try {
-    const data: FoodEntry[] = generateFoodHistory(30);
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
+// app.get('/api/nutrition/history', (req, res) => {
+//   try {
+//     const data: FoodEntry[] = generateFoodHistory(30);
+//     res.json(data);
+//   } catch (error) {
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
 
 // Данные пользователя
 let userData: UserData = {

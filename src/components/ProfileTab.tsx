@@ -17,6 +17,7 @@ import {
   ButtonContainer,
 } from "../styles/profile";
 import { getEffectiveUserId } from "../telegram";
+import SubscriptionModal from "./SubscriptionModal";
 
 interface UserData {
   firstName: string;
@@ -37,6 +38,7 @@ const ProfileTab: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedData, setEditedData] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false); // Добавляем состояние для модального окна
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -122,161 +124,168 @@ const ProfileTab: React.FC = () => {
         <ProfileSub>
           Твоя подписка до {formatDate(userData.subscriptionExpiry)}
         </ProfileSub>
-        <SubscriptionButton>Управление подпиской</SubscriptionButton>
+        <SubscriptionButton onClick={() => setIsSubscriptionModalOpen(true)}>
+          Управление подпиской
+        </SubscriptionButton>
       </ProfileHeader>
 
-    <GradientBlock>
-      <GradientBlockTitle>Немного о тебе</GradientBlockTitle>
-      <InfoCard>
-        <InfoRow>
-          <InfoLabel>Дата рождения</InfoLabel>
-          {isEditing ? (
-            <input
-              type="date"
-              value={editedData?.birthDate || ""}
-              onChange={(e) => handleChange("birthDate", e.target.value)}
-              style={{
-                border: "1px solid #F2F2F7",
-                borderRadius: "8px",
-                padding: "4px 8px",
-              }}
-            />
-          ) : (
-            <InfoValue>{formatDate(userData.birthDate)}</InfoValue>
-          )}
-        </InfoRow>
+      <SubscriptionModal
+        isOpen={isSubscriptionModalOpen}
+        onClose={() => setIsSubscriptionModalOpen(false)}
+      />
 
-        <InfoRow>
-          <InfoLabel>Пол</InfoLabel>
-          {isEditing ? (
-            <select
-              value={editedData?.gender || ""}
-              onChange={(e) => handleChange("gender", e.target.value)}
-              style={{
-                border: "1px solid #F2F2F7",
-                borderRadius: "8px",
-                padding: "4px 8px",
-              }}
-            >
-              <option value="Мужской">Мужской</option>
-              <option value="Женский">Женский</option>
-            </select>
-          ) : (
-            <InfoValue>{userData.gender}</InfoValue>
-          )}
-        </InfoRow>
+      <GradientBlock>
+        <GradientBlockTitle>Немного о тебе</GradientBlockTitle>
+        <InfoCard>
+          <InfoRow>
+            <InfoLabel>Дата рождения</InfoLabel>
+            {isEditing ? (
+              <input
+                type="date"
+                value={editedData?.birthDate || ""}
+                onChange={(e) => handleChange("birthDate", e.target.value)}
+                style={{
+                  border: "1px solid #F2F2F7",
+                  borderRadius: "8px",
+                  padding: "4px 8px",
+                }}
+              />
+            ) : (
+              <InfoValue>{formatDate(userData.birthDate)}</InfoValue>
+            )}
+          </InfoRow>
 
-        <InfoRow>
-          <InfoLabel>Цель</InfoLabel>
-          {isEditing ? (
-            <select
-              value={editedData?.goal || ""}
-              onChange={(e) => handleChange("goal", e.target.value)}
-              style={{
-                border: "1px solid #F2F2F7",
-                borderRadius: "8px",
-                padding: "4px 8px",
-              }}
-            >
-              <option value="Похудение">Похудение</option>
-              <option value="Набор массы">Набор массы</option>
-              <option value="Поддержание веса">Поддержание веса</option>
-            </select>
-          ) : (
-            <InfoValue>{userData.goal}</InfoValue>
-          )}
-        </InfoRow>
+          <InfoRow>
+            <InfoLabel>Пол</InfoLabel>
+            {isEditing ? (
+              <select
+                value={editedData?.gender || ""}
+                onChange={(e) => handleChange("gender", e.target.value)}
+                style={{
+                  border: "1px solid #F2F2F7",
+                  borderRadius: "8px",
+                  padding: "4px 8px",
+                }}
+              >
+                <option value="Мужской">Мужской</option>
+                <option value="Женский">Женский</option>
+              </select>
+            ) : (
+              <InfoValue>{userData.gender}</InfoValue>
+            )}
+          </InfoRow>
 
-        <InfoRow>
-          <InfoLabel>Уровень активности</InfoLabel>
-          {isEditing ? (
-            <select
-              value={editedData?.activityLevel || ""}
-              onChange={(e) => handleChange("activityLevel", e.target.value)}
-              style={{
-                border: "1px solid #F2F2F7",
-                borderRadius: "8px",
-                padding: "4px 8px",
-              }}
-            >
-              <option value="Сидячий образ жизни">Сидячий образ жизни</option>
-              <option value="Лёгкая активность">Лёгкая активность</option>
-              <option value="Умеренная активность">Умеренная активность</option>
-              <option value="Высокая активность">Высокая активность</option>
-              <option value="Очень высокая активность">
-                Очень высокая активность
-              </option>
-            </select>
-          ) : (
-            <InfoValue>{userData.activityLevel}</InfoValue>
-          )}
-        </InfoRow>
+          <InfoRow>
+            <InfoLabel>Цель</InfoLabel>
+            {isEditing ? (
+              <select
+                value={editedData?.goal || ""}
+                onChange={(e) => handleChange("goal", e.target.value)}
+                style={{
+                  border: "1px solid #F2F2F7",
+                  borderRadius: "8px",
+                  padding: "4px 8px",
+                }}
+              >
+                <option value="Похудение">Похудение</option>
+                <option value="Набор массы">Набор массы</option>
+                <option value="Поддержание веса">Поддержание веса</option>
+              </select>
+            ) : (
+              <InfoValue>{userData.goal}</InfoValue>
+            )}
+          </InfoRow>
 
-        <InfoRow>
-          <InfoLabel>Текущий вес</InfoLabel>
-          {isEditing ? (
-            <input
-              type="number"
-              value={editedData?.currentWeight || ""}
-              onChange={(e) =>
-                handleChange("currentWeight", parseFloat(e.target.value))
-              }
-              style={{
-                border: "1px solid #F2F2F7",
-                borderRadius: "8px",
-                padding: "4px 8px",
-                width: "80px",
-                textAlign: "left",
-              }}
-            />
-          ) : (
-            <InfoValue>{userData.currentWeight} кг</InfoValue>
-          )}
-        </InfoRow>
+          <InfoRow>
+            <InfoLabel>Уровень активности</InfoLabel>
+            {isEditing ? (
+              <select
+                value={editedData?.activityLevel || ""}
+                onChange={(e) => handleChange("activityLevel", e.target.value)}
+                style={{
+                  border: "1px solid #F2F2F7",
+                  borderRadius: "8px",
+                  padding: "4px 8px",
+                }}
+              >
+                <option value="Сидячий образ жизни">Сидячий образ жизни</option>
+                <option value="Лёгкая активность">Лёгкая активность</option>
+                <option value="Умеренная активность">Умеренная активность</option>
+                <option value="Высокая активность">Высокая активность</option>
+                <option value="Очень высокая активность">
+                  Очень высокая активность
+                </option>
+              </select>
+            ) : (
+              <InfoValue>{userData.activityLevel}</InfoValue>
+            )}
+          </InfoRow>
 
-        <InfoRow>
-          <InfoLabel>Желаемый вес</InfoLabel>
-          {isEditing ? (
-            <input
-              type="number"
-              value={editedData?.desiredWeight || ""}
-              onChange={(e) =>
-                handleChange("desiredWeight", parseFloat(e.target.value))
-              }
-              style={{
-                border: "1px solid #F2F2F7",
-                borderRadius: "8px",
-                padding: "4px 8px",
-                width: "80px",
-                textAlign: "left",
-              }}
-            />
-          ) : (
-            <InfoValue>{userData.desiredWeight} кг</InfoValue>
-          )}
-        </InfoRow>
+          <InfoRow>
+            <InfoLabel>Текущий вес</InfoLabel>
+            {isEditing ? (
+              <input
+                type="number"
+                value={editedData?.currentWeight || ""}
+                onChange={(e) =>
+                  handleChange("currentWeight", parseFloat(e.target.value))
+                }
+                style={{
+                  border: "1px solid #F2F2F7",
+                  borderRadius: "8px",
+                  padding: "4px 8px",
+                  width: "80px",
+                  textAlign: "left",
+                }}
+              />
+            ) : (
+              <InfoValue>{userData.currentWeight} кг</InfoValue>
+            )}
+          </InfoRow>
 
-        <InfoRow>
-          <InfoLabel>Рост</InfoLabel>
-          {isEditing ? (
-            <input
-              type="number"
-              value={editedData?.height || ""}
-              onChange={(e) => handleChange("height", parseFloat(e.target.value))}
-              style={{
-                border: "1px solid #F2F2F7",
-                borderRadius: "8px",
-                padding: "4px 8px",
-                width: "80px",
-                textAlign: "left",
-              }}
-            />
-          ) : (
-            <InfoValue>{userData.height} см</InfoValue>
-          )}
-        </InfoRow>
-      </InfoCard>
-    </GradientBlock>
+          <InfoRow>
+            <InfoLabel>Желаемый вес</InfoLabel>
+            {isEditing ? (
+              <input
+                type="number"
+                value={editedData?.desiredWeight || ""}
+                onChange={(e) =>
+                  handleChange("desiredWeight", parseFloat(e.target.value))
+                }
+                style={{
+                  border: "1px solid #F2F2F7",
+                  borderRadius: "8px",
+                  padding: "4px 8px",
+                  width: "80px",
+                  textAlign: "left",
+                }}
+              />
+            ) : (
+              <InfoValue>{userData.desiredWeight} кг</InfoValue>
+            )}
+          </InfoRow>
+
+          <InfoRow>
+            <InfoLabel>Рост</InfoLabel>
+            {isEditing ? (
+              <input
+                type="number"
+                value={editedData?.height || ""}
+                onChange={(e) => handleChange("height", parseFloat(e.target.value))}
+                style={{
+                  border: "1px solid #F2F2F7",
+                  borderRadius: "8px",
+                  padding: "4px 8px",
+                  width: "80px",
+                  textAlign: "left",
+                }}
+              />
+            ) : (
+              <InfoValue>{userData.height} см</InfoValue>
+            )}
+          </InfoRow>
+        </InfoCard>
+      </GradientBlock>
 
       <NormCard>
         <NormLabel>Твоя дневная норма</NormLabel>

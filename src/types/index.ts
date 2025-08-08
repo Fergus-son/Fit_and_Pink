@@ -32,6 +32,11 @@ export interface NutritionData {
 }
 
 export interface FoodEntry {
+  id: string;
+  nutrition_data: EntriesData
+}
+
+export interface EntriesData {
   timestamp: string;
   name: string;
   calories: number;

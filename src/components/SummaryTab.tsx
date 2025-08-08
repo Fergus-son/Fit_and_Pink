@@ -9,6 +9,7 @@ import { getEffectiveUserId } from "../telegram";
 import { NutritionBarChart } from "./Charts/BarChart/NutritionBarChart";
 import DateSelector from "./DateSelector/DateSelector";
 import { NutritionChart } from "./Charts/PieCharts/NutritionChart";
+import { FoodEntry } from "../types";
 
 interface MacroValue {
   value: number;
@@ -28,7 +29,7 @@ interface NutritionData {
     protein: number;
     fat: number;
     carbs: number;
-    entries: any[];
+    entries: FoodEntry[];
   }[];
 }
 
@@ -59,7 +60,7 @@ export default function SummaryTab() {
   };
 
   if (!nutritionData) {
-    return <Card>Ошибка загрузки данных</Card>;
+    return <Card>Загрузка...</Card>;
   }
 
   return (
