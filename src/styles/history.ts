@@ -117,6 +117,7 @@ export const ModalContent = styled.div`
   width: 90%;
   max-width: 400px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  margin: 30px;
   
   h2 {
     margin: 0 0 16px 0;
