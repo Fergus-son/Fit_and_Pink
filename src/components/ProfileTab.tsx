@@ -70,7 +70,7 @@ const ProfileTab: React.FC = () => {
   };
 
   const handleOfferClick = () => {
-    window.open("https://natarelke.io/oferta.pdf", "_blank");
+    window.open("https://disk.yandex.ru/i/XJTmOMUNlmj_TQ", "_blank");
   };
 
   const handleEditClick = () => {

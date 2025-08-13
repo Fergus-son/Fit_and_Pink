@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {
   Overlay,
   Content,
-  // TopImageWrapper,
+  TopImageWrapper,
   Title,
   PeriodSelector,
   PeriodButton,
@@ -14,7 +14,7 @@ import {
   Features,
   BuyButton,
 } from "../styles/subscrition";
-// import walletImg from "../images/Wallet.jpg"; // сюда положи картинку кошелька
+import walletImg from "../images/Wallet.png"; // сюда положи картинку кошелька
 
 
 interface SubscriptionModalProps {
@@ -28,7 +28,7 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ isOpen, onClose }
 
   return (
     <Overlay onClick={onClose}>
-      {/* <TopImageWrapper imageUrl={walletImg}/>        */}
+      <TopImageWrapper imageUrl={walletImg}/>       
       <Content onClick={(e) => e.stopPropagation()}>
 
         <Title>Управление подпиской</Title>

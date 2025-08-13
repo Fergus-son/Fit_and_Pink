@@ -55,6 +55,11 @@ export const initTelegram = () => {
     const textColor = tg.themeParams.text_color ?? '#000000';
     document.documentElement.style.setProperty('--tg-theme-bg-color', bgColor);
     document.documentElement.style.setProperty('--tg-theme-text-color', textColor);
+        // Убираем стандартные отступы Telegram
+    document.documentElement.style.padding = '0';
+    document.documentElement.style.margin = '0';
+    document.body.style.padding = '0';
+    document.body.style.margin = '0';
   }
 };
 

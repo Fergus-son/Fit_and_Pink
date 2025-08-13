@@ -20,26 +20,26 @@ export const Content = styled.div`
   margin: 30px;
 `;
 
-// export const TopImageWrapper = styled.div<{ imageUrl: string }>`
-//   position: fixed;
-//   display: flex;
-//   top: 0;
-//   left: 0;
-//   right: 0;
-//   // width: 100%;
-//   height: 40vh;
-//   background-image: url(${props => props.imageUrl});
-//   background-size: cover;
-//   background-position: center;
-//   background-attachment: initial;
-//   z-index: -1;
-//   margin: 30px;
-//   border-radius: 50px 50px 0px 0px;
-//   // margin-top: 40vh; // Отступ сверху = высота изображения
-//   max-width: 420px;
-//   align-items: center; 
+export const TopImageWrapper = styled.div<{ imageUrl: string }>`
+  position: fixed;
+  display: flex;
+  top: 0;
+  left: 0;
+  right: 0;
+  // width: 100%;
+  min-height: 27vh;
+  background-image: url(${props => props.imageUrl});
+  background-size: cover;
+  background-position: center;
+  background-attachment: initial;
+  z-index: -1;
+  margin: 10px 30px 0px 30px;
+  border-radius: 50px 50px 0px 0px;
+  // margin-top: 40vh; // Отступ сверху = высота изображения
+  max-width: 420px;
+  align-items: center; 
 
-// `;
+`;
 
 export const TopImage = styled.img`
   width: 100px;

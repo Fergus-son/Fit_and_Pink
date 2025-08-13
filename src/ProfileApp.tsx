@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { BackgroundImage, Container, ContentOverlay, Section } from "./styles/shared";
-import ProfileImage from './images/SummaryTabPage.jpg';
+import ProfileImage from './images/ProfileTabPage.png';
 import { getUserName, initTelegram } from "./telegram";
 import ProfileTab from "./components/ProfileTab";
 import { Greeting } from "./components/Greeting/Greeting";
@@ -21,7 +21,7 @@ export default function ProfileApp() {
     return (
         <Container>
             <Section>
-                <BackgroundImage imageUrl="../images/SummaryTabPage.png" />
+                <BackgroundImage imageUrl={ProfileImage} />
                 <ContentOverlay>
                     <Greeting username={username} />
                     <ProfileTab />

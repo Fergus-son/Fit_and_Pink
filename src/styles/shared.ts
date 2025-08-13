@@ -90,6 +90,6 @@ export const ContentOverlay = styled(Section)`
   margin-top: 20vh;
   overflow: hidden; /* Запрещаем скролл */
   position: relative;
-  min-height: 110vh;
+  min-height: 125vh;
   z-index: 1;
 `;
